@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans-Italic.ttf') format('truetype'); font-weight:100 900; font-style:italic; font-display:swap; }
+  @font-face { font-family:'DM Serif Display'; src:url('fonts/DMSerifDisplay-Italic.ttf') format('truetype'); font-weight:400; font-style:italic; font-display:swap; }
+  @font-face { font-family:'JetBrains Mono'; src:url('fonts/JetBrainsMono.ttf') format('truetype'); font-weight:100 800; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Archivo Black'; src:url('fonts/ArchivoBlack.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Bodoni Moda'; src:url('fonts/BodoniModa-Italic.ttf') format('truetype'); font-weight:400 800; font-style:italic; font-display:swap; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#F3F1EE; color:#261D1B; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; font-family:'Public Sans',system-ui,sans-serif; overflow-x:clip; }
+  ::selection{ background:#173B40; color:#F3F1EE; }
+  a{ color:inherit; }
+  [data-zf]{ overflow:hidden; }
+  [data-zf] image-slot{ display:block; width:100%; height:100%; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  [data-zf]:hover image-slot{ transform:scale(1.04); }
+  .prod-dd-wrap:hover .prod-dd{ opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+  .prod-dd-wrap:hover .prod-ddc{ transform:rotate(180deg); }
+  @media (max-width:920px){
+    [data-footcols]{ grid-template-columns:1fr 1fr !important; }
+    [data-snap]{ grid-template-columns:repeat(2,1fr) !important; }
+    [data-chapters]{ grid-template-columns:1fr !important; }
+    [data-desktop-nav]{ display:none !important; }
+    [data-2]{ grid-template-columns:1fr !important; }
+    [data-3]{ grid-template-columns:1fr !important; }
+    [data-whorow]{ grid-template-columns:1fr !important; }
+    [data-herorow]{ display:flex !important; flex-wrap:wrap !important; justify-content:center !important; }
+    [data-herorow] > div{ margin-top:0 !important; width:calc(33.333% - 8px) !important; }
+    [data-gal]{ column-count:2 !important; }
+    [data-chapters]{ grid-template-columns:1fr !important; }
+    [data-layers]{ grid-template-columns:1fr !important; }
+    [data-vdiv]{ border-right:0 !important; }
+    [data-ba]{ max-width:440px !important; margin-left:auto !important; margin-right:auto !important; }
+    [data-shift]{ grid-template-columns:1fr !important; text-align:center !important; border-top:0 !important; }
+    [data-shift] > div{ padding:22px 0 !important; border-right:0 !important; border-top:1px solid rgba(38,29,27,0.14) !important; }
+    [data-briefbox]{ padding:20px 18px !important; max-height:250px !important; }
+    [data-bonusrow]{ grid-template-columns:auto 1fr !important; row-gap:4px !important; }
+    [data-bonusrow] > span:last-child{ grid-column:2 !important; justify-self:start !important; margin-top:2px !important; }
+    [data-rev]{ column-count:1 !important; max-width:440px !important; margin:0 auto !important; }
+    [data-hide-m]{ display:none !important; }
+  }
+
+  @media (max-width:560px){
+    header nav{ padding:10px 16px !important; gap:12px !important; }
+    header .prod-dd{ left:auto !important; right:0 !important; transform:translateY(6px) !important; width:min(300px,82vw) !important; }
+    .prod-dd-wrap:hover .prod-dd{ transform:translateY(0) !important; }
+    header a[href="#buy"], header a[href="#join"], header a[href="#call"], header a[href="#roles"], header a[href="#products"]{ padding:10px 16px !important; font-size:13px !important; }
+  }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div style="position:relative;width:100%;overflow-x:clip;">
+
+<!-- NAV -->
+<header style="position:sticky;top:0;z-index:100;backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);background:rgba(243,241,238,0.82);border-bottom:1px solid rgba(38,29,27,0.10);">
+  <nav style="max-width:1280px;margin:0 auto;padding:14px clamp(20px,5vw,48px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;">
+    <a href="index.html" style="justify-self:start;display:flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#261D1B;">
+      <span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Frame</span>
+      <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:22px;color:#173B40;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Flow</span></span>
+    </a>
+    <div style="justify-self:center;display:flex;align-items:center;gap:26px;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;">
+      <div class="prod-dd-wrap" style="position:relative;">
+        <button type="button" style="display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;color:#261D1B;opacity:0.85;transition:opacity .2s;padding:8px 0;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Products <span class="prod-ddc" style="display:inline-block;transition:transform .25s;font-size:10px;opacity:0.6;">▾</span></button>
+        <div class="prod-dd" style="position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;background:#FBFAF8;border:1px solid rgba(38,29,27,0.12);border-radius:16px;box-shadow:0 20px 50px rgba(38,29,27,0.16);padding:10px;width:320px;z-index:120;">
+          <a href="playbook.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Frame AI Playbook</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Direct AI like a creative director</span></a>
+          <a href="skills.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Skills Pack</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">26 skills that run your brand</span></a>
+          <a href="campaign.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">AI Flow Creative Campaign</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">The full campaign masterclass</span></a>
+          <a href="engine.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">Claude Flow Content Engine</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Content on autopilot</span></a>
+        </div>
+      </div>
+      <a href="services.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Enterprise</a>
+      <a href="careers.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Careers</a>
+    </div>
+    <a href="#buy" style="justify-self:end;font-family:'Public Sans';font-size:14px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:12px 26px;border-radius:10px;transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the playbook</a>
+    </div>
+  </nav>
+</header>
+
+<!-- 1 · HERO -->
+<section style="max-width:1280px;margin:0 auto;padding:clamp(40px,7vh,92px) clamp(20px,5vw,48px) clamp(28px,4vh,52px);text-align:center;">
+  <div style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(23,59,64,0.3);border-radius:999px;padding:9px 20px;margin-bottom:26px;"><span style="width:6px;height:6px;border-radius:50%;background:#173B40;"></span><span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:#173B40;font-weight:500;">The Frame AI Playbook</span></div>
+  <h1 style="font-family:'Public Sans';font-weight:800;font-size:clamp(42px,6.6vw,116px);line-height:0.93;letter-spacing:-0.045em;max-width:16ch;margin:0 auto 24px;">Direct AI like a creative <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">director.</em></h1>
+  <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,21px);line-height:1.5;opacity:0.82;max-width:60ch;margin:0 auto clamp(32px,5vh,48px);">Create premium, on-brand visuals from scratch. The full craft, the right tools, the system that makes them <em style="font-family:'DM Serif Display';font-style:italic;color:#173B40;">unmistakably yours.</em></p>
+  <div data-herorow style="display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.4vw,16px);margin-bottom:clamp(32px,5vh,48px);">
+    <div data-zf style="border-radius:14px;"><image-slot id="pb-h1" shape="rect" placeholder="product shot" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+    <div data-zf style="border-radius:14px;margin-top:clamp(14px,3vw,30px);"><image-slot id="pb-h2" shape="rect" placeholder="model + product" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+    <div data-zf style="border-radius:14px;"><image-slot id="pb-h3" shape="rect" placeholder="editorial scene" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+    <div data-zf style="border-radius:14px;margin-top:clamp(14px,3vw,30px);"><image-slot id="pb-h4" shape="rect" placeholder="campaign still" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+    <div data-zf style="border-radius:14px;"><image-slot id="pb-h5" shape="rect" placeholder="lifestyle frame" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <a href="#buy" style="font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:19px 44px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.26);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the playbook</a>
+    <div style="display:flex;align-items:center;gap:10px;"><span style="color:#173B40;font-size:13px;letter-spacing:1.5px;">★★★★★</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.7;">185 pages · 9 chapters · lifetime access</span></div>
+  </div>
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;margin-top:clamp(36px,5vh,56px);display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(38,29,27,0.16);border-bottom:1px solid rgba(38,29,27,0.16);" data-snap>
+    <div data-vdiv style="padding:clamp(18px,2.4vh,28px) 10px;border-right:1px solid rgba(38,29,27,0.12);"><div style="font-family:'Public Sans';font-weight:800;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.03em;line-height:1;">185</div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.55;margin-top:8px;">pages, no fluff</div></div>
+    <div data-vdiv style="padding:clamp(18px,2.4vh,28px) 10px;border-right:1px solid rgba(38,29,27,0.12);"><div style="font-family:'Public Sans';font-weight:800;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.03em;line-height:1;">9</div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.55;margin-top:8px;">chapters, zero to pro</div></div>
+    <div data-vdiv style="padding:clamp(18px,2.4vh,28px) 10px;border-right:1px solid rgba(38,29,27,0.12);"><div style="font-family:'Public Sans';font-weight:800;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.03em;line-height:1;">every <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">tool</em></div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.55;margin-top:8px;">the ones worth it, kept current</div></div>
+    <div style="padding:clamp(18px,2.4vh,28px) 10px;"><div style="font-family:'Public Sans';font-weight:800;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.03em;line-height:1;">4 <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">bonuses</em></div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.55;margin-top:8px;">built for business</div></div>
+  </div>
+</section>
+
+<!-- 2 · THE SHIFT (teal band) -->
+<section style="padding:0 clamp(14px,2.5vw,26px) clamp(36px,5vh,64px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#173B40;color:#F3F1EE;border-radius:24px;padding:clamp(38px,6vh,80px) clamp(24px,5vw,64px);text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:18px;font-weight:600;">The Shift</div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(28px,4vw,56px);line-height:1.02;letter-spacing:-0.04em;max-width:22ch;margin:0 auto 18px;">When everyone holds the same brush, the brush is no longer the <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">advantage.</em></h2>
+    <p style="font-family:'Public Sans';font-size:clamp(15px,1.3vw,18px);line-height:1.55;opacity:0.85;max-width:54ch;margin:0 auto;">Anyone can make a beautiful frame now. The advantage moved to the one thing a tool can't hand you – the eye to direct it. This playbook builds it.</p>
+  </div>
+</section>
+
+<!-- 3 · THE TRANSFORMATION -->
+<section style="background:#F3F1EE;padding:clamp(40px,6vh,72px) clamp(20px,5vw,48px) clamp(56px,9vh,120px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(40px,6vh,64px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.55;margin-bottom:18px;font-weight:600;">The Promise</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.04em;max-width:20ch;margin:0 auto;">By the last page, you'll make content that <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">sells.</em></h2>
+    </div>
+    <div data-ba data-2 style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div data-reveal data-zf style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;border-radius:18px;position:relative;">
+        <image-slot id="pb-before" shape="rect" placeholder="vague prompt · the generic average" style="width:100%;aspect-ratio:4/3;"></image-slot>
+        <div style="position:absolute;top:16px;left:16px;font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;background:rgba(38,29,27,0.85);color:#F3F1EE;padding:7px 12px;border-radius:999px;">type a wish</div>
+      </div>
+      <div data-reveal data-zf style="opacity:0;transform:translateY(20px);transition:opacity .6s ease .08s,transform .6s ease .08s;border-radius:18px;position:relative;">
+        <image-slot id="pb-after" shape="rect" placeholder="directed prompt · unmistakably yours" style="width:100%;aspect-ratio:4/3;"></image-slot>
+        <div style="position:absolute;top:16px;left:16px;font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;background:#173B40;color:#F3F1EE;padding:7px 12px;border-radius:999px;">direct the shot</div>
+      </div>
+    </div>
+    <div data-shift data-2 style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:clamp(40px,6vh,64px);border-top:1px solid rgba(38,29,27,0.18);">
+      <div data-vdiv style="padding:clamp(24px,3vh,36px) clamp(20px,2vw,32px) clamp(24px,3vh,36px) 0;border-right:1px solid rgba(38,29,27,0.14);">
+        <div style="font-family:'Public Sans';font-weight:800;font-size:clamp(26px,2.6vw,40px);letter-spacing:-0.03em;line-height:1;">hours <span style="opacity:0.35;">→</span> <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">minutes</em></div>
+        <div style="font-family:'Public Sans';font-size:15px;line-height:1.5;opacity:0.72;margin-top:12px;">A day's shoot, run before lunch.</div>
+      </div>
+      <div data-vdiv style="padding:clamp(24px,3vh,36px) clamp(20px,2vw,32px);border-right:1px solid rgba(38,29,27,0.14);">
+        <div style="font-family:'Public Sans';font-weight:800;font-size:clamp(26px,2.6vw,40px);letter-spacing:-0.03em;line-height:1;">flat <span style="opacity:0.35;">→</span> <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">photoreal</em></div>
+        <div style="font-family:'Public Sans';font-size:15px;line-height:1.5;opacity:0.72;margin-top:12px;">Real light, real skin, real texture – never AI plastic.</div>
+      </div>
+      <div style="padding:clamp(24px,3vh,36px) 0 clamp(24px,3vh,36px) clamp(20px,2vw,32px);">
+        <div style="font-family:'Public Sans';font-weight:800;font-size:clamp(26px,2.6vw,40px);letter-spacing:-0.03em;line-height:1;">generic <span style="opacity:0.35;">→</span> <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">yours</em></div>
+        <div style="font-family:'Public Sans';font-size:15px;line-height:1.5;opacity:0.72;margin-top:12px;">Unmistakably your brand. Built to sell.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · THE LAYER SYSTEM (signature) -->
+<section style="padding:0 clamp(14px,2.5vw,26px) clamp(56px,9vh,120px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#261D1B;color:#F3F1EE;border-radius:24px;padding:clamp(40px,6vw,80px);">
+    <div data-2 style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:stretch;">
+      <!-- LEFT · the big brief teaser -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div data-briefbox style="position:relative;background:rgba(243,241,238,0.05);border:1px solid rgba(243,241,238,0.14);border-radius:16px;padding:30px 32px 64px;overflow:hidden;flex:1;display:flex;flex-direction:column;">
+          <div style="filter:blur(6px);user-select:none;">
+            <div style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#E6DED5;margin-bottom:18px;">The brief that made it</div>
+            <p style="font-family:'Public Sans';font-size:clamp(15px,1.5vw,18px);line-height:1.7;opacity:0.92;margin-bottom:18px;">Editorial matte cream bottle on rough plaster, centered with generous negative space, soft morning light from the left, a shallow-aperture macro that melts the background, a warm low-contrast palette, raw believable texture and a breath of grain.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;"><span style="font-family:'Public Sans';font-size:13px;font-weight:600;background:rgba(243,241,238,0.1);border-radius:99px;padding:7px 14px;color:#F3F1EE;">layer 01</span><span style="font-family:'Public Sans';font-size:13px;font-weight:600;background:rgba(243,241,238,0.1);border-radius:99px;padding:7px 14px;color:#F3F1EE;">layer 02</span><span style="font-family:'Public Sans';font-size:13px;font-weight:600;background:rgba(243,241,238,0.1);border-radius:99px;padding:7px 14px;color:#F3F1EE;">layer 03</span><span style="font-family:'Public Sans';font-size:13px;font-weight:600;background:rgba(243,241,238,0.1);border-radius:99px;padding:7px 14px;color:#F3F1EE;">+ seven more</span></div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding:22px;background:linear-gradient(0deg,rgba(38,29,27,0.72),rgba(38,29,27,0) 70%);"><span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#E6DED5;">The exact brief is on page 43 →</span></div>
+        </div>
+      </div>
+      <!-- RIGHT · the method + chapter buttons -->
+      <div style="display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:20px;">The Method</div>
+        <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(30px,3.6vw,56px);line-height:1.0;letter-spacing:-0.04em;margin-bottom:22px;">Photoreal images aren't prompted. They're <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">directed.</em></h2>
+        <p style="font-family:'Public Sans';font-size:clamp(15px,1.5vw,18px);line-height:1.6;opacity:0.82;margin-bottom:28px;max-width:42ch;">Learn the ten-layer system behind every frame a real photographer shoots. Master it once, and you'll never type a blind prompt again. <em style="font-family:'DM Serif Display';font-style:italic;color:#E6DED5;">Once you see it, you can't unsee it.</em></p>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(243,241,238,0.55);margin-bottom:14px;">What you'll master</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <span style="font-family:'Public Sans';font-weight:600;font-size:14px;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.18);color:#F3F1EE;border-radius:99px;padding:10px 18px;">Photoreal light</span>
+          <span style="font-family:'Public Sans';font-weight:600;font-size:14px;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.18);color:#F3F1EE;border-radius:99px;padding:10px 18px;">Real skin &amp; texture</span>
+          <span style="font-family:'Public Sans';font-weight:600;font-size:14px;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.18);color:#F3F1EE;border-radius:99px;padding:10px 18px;">Brand-consistent looks</span>
+          <span style="font-family:'Public Sans';font-weight:600;font-size:14px;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.18);color:#F3F1EE;border-radius:99px;padding:10px 18px;">Product &amp; model shots</span>
+          <span style="font-family:'Public Sans';font-weight:600;font-size:14px;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.18);color:#F3F1EE;border-radius:99px;padding:10px 18px;">Motion &amp; video</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4b · THE TOOLS -->
+<section style="background:#173B40;color:#F3F1EE;padding:clamp(40px,6vh,80px) clamp(20px,5vw,48px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(28px,4vh,44px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:14px;font-weight:600;">Tools Compared</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:1;letter-spacing:-0.04em;max-width:20ch;margin:0 auto 14px;">Never open the wrong tool <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">again.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(15px,1.3vw,17px);line-height:1.55;opacity:0.78;max-width:60ch;margin:0 auto;">Know exactly which model to open, what it costs, and where it fails – so you reach for the right one first, finish in a fraction of the time, and put that time back into growing the brand.</p>
+    </div>
+    <div data-3 style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <sc-for list="{{ tools }}" as="t" hint-placeholder-count="4">
+        <div style="background:rgba(243,241,238,0.04);border:1px solid rgba(243,241,238,0.14);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
+          <div data-zf style="border-radius:0;"><image-slot id="{{ t.slot }}" shape="rect" placeholder="{{ t.ph }}" style="width:100%;aspect-ratio:16/11;display:block;"></image-slot></div>
+          <div style="padding:clamp(16px,1.5vw,22px);">
+            <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#E6DED5;margin-bottom:9px;">{{ t.kind }}</div>
+            <h3 style="font-family:'Public Sans';font-weight:700;font-size:clamp(17px,1.5vw,20px);letter-spacing:-0.025em;margin-bottom:8px;line-height:1.1;">{{ t.title }}</h3>
+            <p style="font-family:'Public Sans';font-size:13px;line-height:1.5;opacity:0.74;">{{ t.desc }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · WHAT'S INSIDE (9 chapters) -->
+<section id="inside" style="background:#F3F1EE;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;margin-bottom:clamp(36px,5vh,52px);max-width:60ch;text-align:center;margin-left:auto;margin-right:auto;">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;font-weight:600;">What's Inside</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.96;letter-spacing:-0.04em;">Nine chapters,<br>one <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">system.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.55;opacity:0.82;margin-top:18px;">Each chapter hands you one piece of the craft – and they lock together into a system you own for good.</p>
+    </div>
+    <div data-chapters style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <sc-for list="{{ chapters }}" as="c" hint-placeholder-count="9">
+        <a href="#buy" style="text-decoration:none;color:#261D1B;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:999px;padding:13px 22px;display:flex;gap:13px;align-items:center;box-shadow:0 2px 10px rgba(38,29,27,0.04);transition:transform .25s,box-shadow .25s,border-color .25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 30px rgba(38,29,27,0.1)';this.style.borderColor='rgba(23,59,64,0.4)';this.querySelector('[data-arr]').style.transform='translateX(4px)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 10px rgba(38,29,27,0.04)';this.style.borderColor='rgba(38,29,27,0.1)';this.querySelector('[data-arr]').style.transform='none'">
+          <span style="font-family:'JetBrains Mono';font-size:12px;color:#173B40;font-weight:600;flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(23,59,64,0.3);display:flex;align-items:center;justify-content:center;">{{ c.num }}</span>
+          <div style="flex:1;min-width:0;">
+            <h3 style="font-family:'Public Sans';font-weight:700;font-size:clamp(16px,1.6vw,19px);letter-spacing:-0.02em;margin-bottom:3px;">{{ c.title }}</h3>
+            <p style="font-family:'Public Sans';font-size:13px;line-height:1.45;opacity:0.7;">{{ c.desc }}</p>
+          </div>
+          <span data-arr style="font-family:'DM Serif Display';font-style:italic;font-size:20px;color:#173B40;flex-shrink:0;transition:transform .25s;">→</span>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 4c · BONUSES -->
+<section style="background:#E6DED5;padding:clamp(40px,6vh,72px) clamp(20px,5vw,48px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;margin-bottom:clamp(24px,3.5vh,36px);max-width:60ch;text-align:center;margin-left:auto;margin-right:auto;">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:14px;font-weight:600;">The Bonuses · Included Free</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.96;letter-spacing:-0.04em;">Four bonuses to<br>transform your <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">brand.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(15px,1.4vw,18px);line-height:1.5;opacity:0.82;margin-top:14px;">One for every stage – whether you are starting from nothing or scaling what you already have.</p>
+    </div>
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:880px;margin:0 auto;background:#fff;border:1px solid rgba(23,59,64,0.16);border-radius:24px;box-shadow:0 18px 50px rgba(23,59,64,0.08);overflow:hidden;">
+      <div style="background:#173B40;color:#F3F1EE;padding:14px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.28em;text-transform:uppercase;font-weight:600;">Included Free</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;opacity:0.7;">4 bonuses</span>
+      </div>
+      <div>
+        <sc-for list="{{ bonuses }}" as="b" hint-placeholder-count="4">
+          <div data-bonusrow style="display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:13px 24px;border-bottom:1px solid rgba(38,29,27,0.08);">
+            <span style="font-family:'Public Sans';font-weight:800;font-size:19px;letter-spacing:-0.03em;color:rgba(23,59,64,0.25);line-height:1;">{{ b.num }}</span>
+            <div style="min-width:0;">
+              <h3 style="font-family:'Public Sans';font-weight:700;font-size:clamp(15px,1.6vw,18px);letter-spacing:-0.02em;line-height:1.1;margin-bottom:3px;">{{ b.title }}</h3>
+              <p style="font-family:'Public Sans';font-size:13px;line-height:1.4;opacity:0.68;">{{ b.desc }}</p>
+            </div>
+            <span style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:#173B40;background:rgba(23,59,64,0.08);border-radius:999px;padding:6px 12px;white-space:nowrap;">{{ b.value }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:clamp(24px,3.5vh,36px);"><a href="#buy" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:18px 40px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.22);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the playbook</a></div>
+  </div>
+</section>
+
+<!-- 6 · WHO IT'S FOR -->
+<section id="who" style="background:#F3F1EE;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px) clamp(36px,5vh,64px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(40px,6vh,60px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;font-weight:600;">Who It's For</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.04em;">For the ones who want <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">more.</em></h2>
+    </div>
+    <div data-whobox style="max-width:1080px;margin:0 auto;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:24px;overflow:hidden;box-shadow:0 18px 50px rgba(38,29,27,0.06);">
+      <div style="display:flex;border-bottom:1px solid rgba(38,29,27,0.1);">
+        <sc-for list="{{ whoTabs }}" as="t" hint-placeholder-count="2">
+          <button onClick="{{ t.onClick }}" style="{{ t.tabStyle }}">{{ t.title }}</button>
+        </sc-for>
+      </div>
+      <div data-whorow style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;">
+        <div data-zf style="overflow:hidden;background:#E6DED5;"><image-slot id="{{ whoActive.slot }}" shape="rect" placeholder="{{ whoActive.ph }}" style="width:100%;height:100%;min-height:360px;aspect-ratio:1/1;display:block;"></image-slot></div>
+        <div style="padding:clamp(30px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:18px;">
+          <sc-for list="{{ whoActive.rows }}" as="r" hint-placeholder-count="2">
+            <div style="border-top:1px solid rgba(38,29,27,0.1);padding-top:16px;"><h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-0.025em;margin-bottom:8px;">{{ r.h }}</h3><p style="font-family:'Public Sans';font-size:clamp(15px,1.4vw,17px);line-height:1.58;opacity:0.82;">{{ r.p }}</p></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:clamp(40px,6vh,60px);"><a href="#buy" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:18px 40px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.22);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the playbook</a></div>
+  </div>
+</section>
+
+<!-- 8 · REVIEWS -->
+<section id="reviews" style="background:#F3F1EE;padding:clamp(16px,2.5vh,36px) clamp(20px,5vw,48px) clamp(56px,9vh,120px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(28px,4vh,44px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">from the people using it</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.8vw,72px);line-height:0.98;letter-spacing:-0.04em;">Worth every <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">page.</em></h2>
+    </div>
+    <div data-rev style="column-count:3;column-gap:16px;">
+      <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="6">
+        <div style="break-inside:avoid;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:16px;padding:26px;margin-bottom:16px;box-shadow:0 2px 12px rgba(38,29,27,0.04);">
+          <span style="color:#173B40;font-size:12px;letter-spacing:1px;">★★★★★</span>
+          <p style="font-family:'Public Sans';font-size:15px;line-height:1.55;font-weight:500;margin:12px 0 20px;">{{ r.quote }}</p>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <image-slot id="{{ r.slot }}" shape="circle" placeholder="photo" style="width:42px;height:42px;flex-shrink:0;"></image-slot>
+            <div><div style="font-family:'Public Sans';font-weight:600;font-size:14px;">{{ r.name }}</div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6;margin-top:2px;">{{ r.role }}</div></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · PRICING -->
+<section id="buy" style="background:#173B40;padding:clamp(40px,6vh,90px) clamp(20px,5vw,48px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1080px;margin:0 auto;text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:16px;">enroll</div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.045em;color:#F3F1EE;max-width:16ch;margin:0 auto clamp(24px,3.5vh,40px);">One playbook. The whole <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">craft.</em></h2>
+  </div>
+  <div data-reveal data-2 style="opacity:0;transform:translateY(20px);transition:opacity .6s ease .08s,transform .6s ease .08s;max-width:1040px;margin:0 auto;background:#F3F1EE;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,0.3);">
+    <!-- left: the cover + what it is -->
+    <div data-zf style="position:relative;min-height:300px;"><image-slot id="pb-buy" shape="rect" placeholder="the playbook cover" style="width:100%;height:100%;"></image-slot></div>
+    <!-- right: the value stack receipt -->
+    <div style="padding:clamp(24px,2.6vw,38px);display:flex;flex-direction:column;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#173B40;margin-bottom:6px;">The Frame AI Playbook</div>
+      <h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-0.03em;margin-bottom:16px;">What you get</h3>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(38,29,27,0.14);">
+        <sc-for list="{{ valueStack }}" as="v" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid rgba(38,29,27,0.1);">
+            <span style="font-family:'Public Sans';font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;"><span style="color:#173B40;">✦</span>{{ v.label }}</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:16px;color:#173B40;white-space:nowrap;">{{ v.value }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0 0;">
+          <span style="font-family:'Public Sans';font-size:14px;font-weight:600;opacity:0.6;">Yours for life</span>
+          <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#173B40;">no subscription</span>
+        </div>
+      </div>
+      <div style="margin-top:auto;padding-top:20px;">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+          <span style="font-family:'Public Sans';font-weight:800;font-size:clamp(38px,4vw,54px);letter-spacing:-0.04em;line-height:1;">$89</span>
+        </div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">Yours for life · no subscription</div>
+        <a href="https://buy.stripe.com/aFa6oHePG7Ha5383grfMA00" target="_blank" rel="noopener" style="display:block;text-align:center;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:17px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.28);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the playbook</a>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;">★★★★★ &nbsp;instant access · lifetime updates</div>
+        <p style="margin-top:14px;font-family:'Public Sans';font-size:12px;line-height:1.5;text-align:center;opacity:0.5;">* A one-time purchase with lifetime access. As the full guide is delivered instantly, all sales are final and non-refundable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- gallery -->
+<!-- 7 · MENTOR -->
+<section style="background:#E6DED5;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px);">
+  <div data-reveal data-2 style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(32px,5vw,80px);align-items:center;">
+    <div data-zf style="aspect-ratio:4/5;border-radius:18px;overflow:hidden;"><img src="assets/lior-portrait.png" alt="Lior" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+    <div>
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">the face behind</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(30px,3.8vw,56px);line-height:1.0;letter-spacing:-0.04em;margin-bottom:24px;">Hi, I'm <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">Lior.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.65;opacity:0.84;margin-bottom:18px;">I believe a beautiful image is the easy part now – anyone can make one. What actually moves a business is content that carries a brand's voice, holds attention, and turns it into sales. That belief is the whole reason this exists.</p>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.65;opacity:0.84;margin-bottom:26px;">So I wrote down the exact system I use to get there – the craft most of this industry never talks about – so you can run it yourself instead of guessing.</p>
+      <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(18px,2vw,26px);line-height:1.35;color:#173B40;">Stay close, do the work, and what takes most people hours will take you minutes.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background:#F3F1EE;padding:clamp(36px,6vh,80px) clamp(14px,2.5vw,26px);">
+  <div style="max-width:1440px;margin:0 auto;">
+    <div data-gal style="column-count:5;column-gap:clamp(8px,1.2vw,14px);">
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g1" shape="rect" placeholder="product" style="width:100%;aspect-ratio:3/4;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g2" shape="rect" placeholder="model" style="width:100%;aspect-ratio:3/4.4;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g3" shape="rect" placeholder="editorial" style="width:100%;aspect-ratio:1/1;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g4" shape="rect" placeholder="campaign" style="width:100%;aspect-ratio:3/4.2;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g5" shape="rect" placeholder="lifestyle" style="width:100%;aspect-ratio:3/3.4;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g6" shape="rect" placeholder="beauty" style="width:100%;aspect-ratio:3/4.6;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g7" shape="rect" placeholder="UGC" style="width:100%;aspect-ratio:1/1;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g8" shape="rect" placeholder="flat lay" style="width:100%;aspect-ratio:3/4;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g9" shape="rect" placeholder="still life" style="width:100%;aspect-ratio:3/4.3;"></image-slot></div>
+      <div data-zf style="border-radius:12px;break-inside:avoid;margin-bottom:clamp(8px,1.2vw,14px);overflow:hidden;"><image-slot id="pb-g10" shape="rect" placeholder="portrait" style="width:100%;aspect-ratio:3/3.6;"></image-slot></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · FAQ -->
+<section style="background:#F3F1EE;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px);">
+  <div style="max-width:1000px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin-bottom:40px;">
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,5vw,72px);line-height:0.96;letter-spacing:-0.04em;">before you <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">start.</em></h2>
+    </div>
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;border-top:1px solid rgba(38,29,27,0.15);">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="4">
+        <div style="border-bottom:1px solid rgba(38,29,27,0.15);">
+          <button onClick="{{ f.toggle }}" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#261D1B;">
+            <span style="font-family:'Public Sans';font-weight:700;font-size:clamp(16px,1.8vw,21px);letter-spacing:-0.02em;">{{ f.q }}</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:26px;color:#173B40;line-height:1;flex-shrink:0;width:24px;text-align:center;">{{ f.sign }}</span>
+          </button>
+          <div style="{{ f.answerStyle }}"><p style="font-family:'Public Sans';font-size:16px;line-height:1.65;opacity:0.8;padding-bottom:24px;max-width:74ch;">{{ f.a }}</p></div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · FINAL CTA -->
+<section style="background:#F3F1EE;padding:0 clamp(14px,2.5vw,26px) clamp(20px,3vh,40px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#173B40;color:#F3F1EE;border-radius:24px;padding:clamp(64px,12vh,150px) clamp(20px,5vw,56px);text-align:center;">
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(38px,6.4vw,104px);line-height:0.96;letter-spacing:-0.045em;margin-bottom:24px;max-width:18ch;margin-left:auto;margin-right:auto;">Everything it takes to shoot it <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">yourself.</em></h2>
+    <p style="font-family:'Public Sans';font-size:clamp(16px,1.6vw,22px);opacity:0.85;margin-bottom:36px;max-width:46ch;margin-left:auto;margin-right:auto;">Creative, system, and direction – not budget – are what make a brand iconic now. All of it can be learned.</p>
+    <a href="#buy" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#F3F1EE;color:#261D1B;padding:20px 46px;border-radius:12px;transition:transform .25s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">Get the playbook</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#261D1B;color:#F3F1EE;padding:clamp(48px,7vh,84px) clamp(20px,5vw,48px) clamp(28px,4vh,40px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-footcols style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(32px,5vw,64px);padding-bottom:clamp(36px,5vh,56px);border-bottom:1px solid rgba(243,241,238,0.14);">
+      <div>
+        <a href="index.html" style="display:inline-flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#F3F1EE;margin-bottom:18px;">
+          <span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Frame</span>
+          <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:26px;color:#E6DED5;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Flow</span><span style="font-family:'Geist';font-weight:300;font-size:15px;letter-spacing:0.02em;opacity:0.72;margin-left:6px;align-self:flex-end;">Club</span></span>
+        </a>
+        <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(16px,1.5vw,20px);line-height:1.35;color:#E6DED5;max-width:30ch;margin-bottom:22px;">Frame the eye. Flow the system. Ship the work.</p>
+        <div style="display:flex;gap:12px;">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F3F1EE" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="#F3F1EE" stroke="none"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#F3F1EE"><path d="M14 8.5V7c0-.9.3-1.5 1.7-1.5H17V2.6C16.5 2.5 15.5 2.4 14.4 2.4c-2.4 0-4 1.4-4 4.1v2H7.5V12h2.9v9.6H14V12h2.6l.4-3.5H14z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Products</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="playbook.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Frame AI Playbook</a>
+          <a href="skills.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Skills Pack</a>
+          <a href="campaign.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">AI Flow Creative Campaign</a>
+          <a href="engine.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Claude Flow Content Engine</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="index.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Home</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="terms.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Terms &amp; Conditions</a>
+          <a href="privacy.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;padding-top:24px;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.5;">© 2026 Frame &amp; Flow Club. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { faqOpen: 0 };
+  componentDidMount() {
+    try {
+      const els = [...document.querySelectorAll('[data-reveal]')];
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='none'; io.unobserve(e.target); } });
+      }, { rootMargin:'0px 0px -8% 0px', threshold:0.04 });
+      els.forEach(el => io.observe(el));
+      this._fb = setTimeout(()=>els.forEach(el=>{el.style.opacity='1';el.style.transform='none';}),2600);
+    } catch(e){}
+  }
+  componentWillUnmount(){ clearTimeout(this._fb); }
+  toggleFaq(i){ this.setState(s=>({ faqOpen: s.faqOpen===i?-1:i })); }
+  renderVals() {
+    const chapters = [
+      { num:'01', title:'The Premise', desc:'The tool was never the moat – the ability to direct is. And why one beautiful frame that sells nothing is just a screensaver.' },
+      { num:'02', title:'Build a Brand World', desc:'A logo is not a brand. Build the six-layer world people want to belong to – and your brand vocabulary that steers every image.' },
+      { num:'03', title:'The Frame', desc:'Think like a director. The ten layers of a prompt – and the four that decide whether an image reads truly shot or obviously AI.' },
+      { num:'04', title:'The Tools', desc:'The short list that matters – the brains, the look, the image, the motion. What each model is for, what it costs, where it fails.' },
+      { num:'05', title:'The Build', desc:'Stop starting from a blank page. Build a brand brain and produce thirty on-brand assets – image, motion and sound – from one brief.' },
+      { num:'06', title:'The Library', desc:'Your prompt drawer. Ready-to-use skeletons for editorial, UGC, product, lifestyle and more – pull one the moment you need a shot.' },
+      { num:'07', title:'The Fix', desc:'A weak frame is a blank layer, not a bad model. Diagnose the five common misses and finish the last ten percent like a pro.' },
+      { num:'08', title:'The Kit', desc:'Run it without us. Fill-in workbooks, the voice card, the prompt formula and two pre-flight checklists you reuse on every image.' },
+      { num:'09', title:'The Bonuses', desc:'Four practical playbooks: build a brand from scratch, refresh one in a weekend, audit like a director, and lock your prompt DNA.' }
+    ];
+    const whoData = [
+      { num:'01', tone:'cream', slot:'pb-who1', ph:'brand owner', title:'Brand owners', desc:'Replace expensive shoots with premium, on-brand visuals you make yourself – and look far bigger than your headcount.' },
+      { num:'02', tone:'cream', slot:'pb-who2', ph:'agency team', title:'Agencies', desc:'Hold every client\u2019s look without a reshoot, and deliver more in a day than a studio does in a week.' },
+      { num:'03', tone:'teal', slot:'pb-who3', ph:'creator at work', title:'Creators & freelancers', desc:'Sell on-brand content as a service with no studio or budget – and charge for the result, not the hours.' }
+    ];
+    const whoGroups = [
+      { title:'Brand owners', slot:'pb-who1', ph:'brand owner', rows:[
+        { h:'Brand owners', p:'Replace expensive shoots with premium, on-brand visuals you make yourself – and look far bigger than your team.' }
+      ]},
+      { title:'Agencies & creators', slot:'pb-who2', ph:'agency and creator work', rows:[
+        { h:'Agencies', p:'Hold every client\u2019s look without a reshoot, and deliver more in a day than a studio does in a week.' },
+        { h:'Creators & freelancers', p:'Sell on-brand content as a service with no studio or budget – and charge for the result, not the hours.' }
+      ]}
+    ];
+    const whoActive = whoGroups[this.state.whoTab || 0] || whoGroups[0];
+    const whoTabs = whoGroups.map((w,i) => {
+      const on = (this.state.whoTab||0) === i;
+      return {
+        title: w.title,
+        onClick: () => this.setState({ whoTab: i }),
+        tabStyle: {
+          flex: '1', cursor: 'pointer', border: 'none', borderBottom: on ? '2px solid #173B40' : '2px solid transparent',
+          background: on ? '#F3F1EE' : 'transparent', color: '#261D1B', opacity: on ? 1 : 0.55,
+          fontFamily: "'JetBrains Mono'", fontSize: 'clamp(10px,1.1vw,12px)', letterSpacing: '0.14em', textTransform: 'uppercase',
+          fontWeight: 600, padding: 'clamp(16px,2vw,22px) 10px', transition: 'opacity .2s, background .2s'
+        }
+      };
+    });
+    const who = whoData.map(w => ({
+      num: w.num, title: w.title, desc: w.desc, slot: w.slot, ph: w.ph,
+      cardStyle: { background: w.tone==='teal' ? '#173B40' : '#FBFAF8', color: w.tone==='teal' ? '#F3F1EE' : '#261D1B', border: w.tone==='teal' ? '1px solid #173B40' : '1px solid rgba(38,29,27,0.1)', borderRadius:'18px', padding:'clamp(18px,1.8vw,24px)', minHeight:'240px', display:'flex', flexDirection:'column', boxShadow:'0 2px 12px rgba(38,29,27,0.04)' },
+      numStyle: { fontFamily:"'JetBrains Mono'", fontSize:'13px', letterSpacing:'0.1em', color: w.tone==='teal' ? '#E6DED5' : '#173B40', marginBottom:'auto', paddingBottom:'24px' }
+    }));
+    const reviews = [
+      { slot:'ff-rev-0', name:'Maya S.', role:'Brand Owner', quote:'"This is the first thing that taught me to direct, not just prompt. My content finally looks like my brand."' },
+      { slot:'ff-rev-1', name:'Daniel K.', role:'Agency Lead', quote:'"The layer system alone changed how my whole team works. We brief AI like a shoot now, and the results show it."' },
+      { slot:'ff-rev-2', name:'Noa L.', role:'Creator', quote:'"I went from generic AI slop to a feed that looks intentional. Worth every single page."' },
+      { slot:'ff-rev-3', name:'James C.', role:'E-commerce Founder', quote:'"Thirty assets from one brief is not an exaggeration. My catalogue shoots are basically free now."' },
+      { slot:'ff-rev-4', name:'Yael B.', role:'Marketing Lead', quote:'"It reads like a creative director sat down and wrote out everything they know. Nothing else comes close."' },
+      { slot:'ff-rev-8', name:'Tom B.', role:'Startup Founder', quote:'"With no design team, my brand finally looks like it has a budget it does not have."' }
+    ];
+    const includes = ['185 pages of visual, step-by-step guidance','The 10-layer prompt system','The full tool map – image, motion, voice','The prompt library you pull from on demand','The brand-world worksheet & campaign kit','Lifetime access & every future update'];
+    const faqData = [
+      { q:'Do I need any experience?', a:'None. The playbook starts at your very first image and builds the full system from there, in the order you would actually use it. If you can write a sentence, you can direct a shot.' },
+      { q:'Do I need expensive software or a powerful computer?', a:'No. Everything runs in tools you open in a browser, most with a free tier to start. We tell you exactly which to use at each step, so you are never paying for things you do not need.' },
+      { q:'Which AI tools does it cover – and what if they change?', a:'It covers all the ones that matter today – image, motion, voice and sound – what each is built to do, what it costs, and where it fails. And because the playbook teaches the system rather than one button, when a better tool ships you simply plug it in. Updates are free for life.' },
+      { q:'Will my content actually look on-brand, not generic AI?', a:'That is the entire point. A full chapter builds your brand world and vocabulary, so every frame is unmistakably yours – the opposite of the generic average most people get.' },
+      { q:'Can I use it for my own products and any industry?', a:'Yes. The method works for beauty, fashion, jewelry, food, supplements, products and people alike – you bring the brand, the playbook shows you how to direct it.' },
+      { q:'Is this for businesses, or only creators?', a:'Both. Brand owners use it to look far bigger than their headcount, agencies to hold a look across clients, freelancers and marketers to ship on-brand content with no studio. The business bonuses are built for exactly this.' },
+      { q:'How long until I can make something real?', a:'You direct your first on-brand image in the opening chapter – within your first sitting. The full system compounds from there across 185 pages.' },
+      { q:'Is it a one-time payment?', a:'Yes. Pay once, get instant access, keep it for good, and every future update is free.' },
+      { q:'Can I get a refund?', a:'Because this is a digital product delivered instantly on purchase, all sales are final and we don\u2019t offer refunds. In return you get lifetime access and every future update, free.' }
+    ];
+    const faqs = faqData.map((f,i)=>{ const open=this.state.faqOpen===i; return { q:f.q, a:f.a, sign: open?'–':'+', toggle:()=>this.toggleFaq(i), answerStyle:{ overflow:'hidden', maxHeight: open?'280px':'0px', opacity: open?1:0, transition:'max-height .5s cubic-bezier(.2,.7,.2,1), opacity .4s' } }; });
+    const tools = [
+      { slot:'pb-tool-1', ph:'product shots', kind:'for product shots', title:'Keep the product true', desc:'The model that holds your exact shape, label and colour – plus the ones that quietly redraw it off-brand. Reach for the right one and never re-shoot.' },
+      { slot:'pb-tool-2', ph:'people & skin', kind:'for people & UGC', title:'Make people look real', desc:'The model that renders real pores, hair and natural skin for UGC and lifestyle – and the ones that still come out waxy. Know which to open every time.' },
+      { slot:'pb-tool-3', ph:'motion & video', kind:'for motion & video', title:'Turn a still into motion', desc:'The model that animates a frame into clean, on-brand video – and the ones that warp and melt. The right pick for every clip, at a glance.' },
+      { slot:'pb-tool-4', ph:'voice & sound', kind:'for voice & sound', title:'Give it a voice & sound', desc:'The model that delivers natural voiceover, ambience and music that fit your brand – and the ones that still sound robotic. Know exactly what to open, and what it costs.' }
+    ];
+    const bonuses = [
+      { num:'01', title:'Build a Brand From Scratch', value:'starting out', desc:'No identity yet? Generate a complete, credible brand – soul, name, logo, palette and world – from nothing, using the tools you just learned.' },
+      { num:'02', title:'The Weekend Refresh', value:'already running', desc:'Brand feels dated? Modernise your entire visual look in a single weekend – no agency, no rebrand budget, no starting over.' },
+      { num:'03', title:'Audit Like a Creative Director', value:'levelling up', desc:'Not sure what is off? Score your current visuals the way a director would, and see exactly what to fix to look premium.' },
+      { num:'04', title:'Your Brand\u2019s Prompt DNA', value:'scaling content', desc:'Lock your brand into a reusable prompt identity, so every image you generate from now on comes out unmistakably yours.' }
+    ];
+    const valueStack = [
+      { label:'Make photoreal images indistinguishable from a real shoot', value:'the core' },
+      { label:'Produce in minutes what used to cost a day and a studio', value:'185 pages' },
+      { label:'Build a brand world that is unmistakably, only yours', value:'9 chapters' },
+      { label:'Always know the exact AI tool for the job', value:'kept current' },
+      { label:'A library of ready-made prompts, plus your brand-world worksheet', value:'4 bonuses' },
+      { label:'Every future update, on us', value:'for life' }
+    ];
+    return { chapters, who, whoTabs, whoActive, reviews, includes, faqs, tools, bonuses, valueStack };
+  }
+}
+</script>
+</body>
+</html>

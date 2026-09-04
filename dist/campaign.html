@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans-Italic.ttf') format('truetype'); font-weight:100 900; font-style:italic; font-display:swap; }
+  @font-face { font-family:'DM Serif Display'; src:url('fonts/DMSerifDisplay-Italic.ttf') format('truetype'); font-weight:400; font-style:italic; font-display:swap; }
+  @font-face { font-family:'JetBrains Mono'; src:url('fonts/JetBrainsMono.ttf') format('truetype'); font-weight:100 800; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Archivo Black'; src:url('fonts/ArchivoBlack.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Bodoni Moda'; src:url('fonts/BodoniModa-Italic.ttf') format('truetype'); font-weight:400 800; font-style:italic; font-display:swap; }
+  @font-face { font-family:'Geist'; src:url('fonts/Geist.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#F3F1EE; color:#261D1B; -webkit-font-smoothing:antialiased; font-family:'Public Sans',system-ui,sans-serif; overflow-x:clip; }
+  ::selection{ background:#173B40; color:#F3F1EE; }
+  a{ color:inherit; }
+  @media (max-width:880px){
+    [data-footcols]{ grid-template-columns:1fr 1fr !important; }
+    [data-desktop-nav]{ display:none !important; }
+    [data-mods]{ grid-template-columns:1fr !important; }
+    [data-buy]{ grid-template-columns:1fr !important; }
+  }
+  .prod-dd-wrap:hover .prod-dd{ opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+  .prod-dd-wrap:hover .prod-ddc{ transform:rotate(180deg); }
+
+  @media (max-width:560px){
+    header nav{ padding:10px 16px !important; gap:12px !important; }
+    header .prod-dd{ left:auto !important; right:0 !important; transform:translateY(6px) !important; width:min(300px,82vw) !important; }
+    .prod-dd-wrap:hover .prod-dd{ transform:translateY(0) !important; }
+    header a[href="#buy"], header a[href="#join"], header a[href="#call"], header a[href="#roles"], header a[href="#products"]{ padding:10px 16px !important; font-size:13px !important; }
+  }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div style="position:relative;width:100%;overflow-x:clip;">
+
+<!-- NAV -->
+<header style="position:sticky;top:0;z-index:100;backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);background:rgba(243,241,238,0.82);border-bottom:1px solid rgba(38,29,27,0.10);">
+  <nav style="max-width:1280px;margin:0 auto;padding:14px clamp(20px,5vw,48px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;">
+    <a href="index.html" style="justify-self:start;display:flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#261D1B;">
+      <span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Frame</span>
+      <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:22px;color:#173B40;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Flow</span></span>
+    </a>
+    <div style="justify-self:center;display:flex;align-items:center;gap:26px;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;">
+      <div class="prod-dd-wrap" style="position:relative;">
+        <button type="button" style="display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;color:#261D1B;opacity:0.85;transition:opacity .2s;padding:8px 0;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Products <span class="prod-ddc" style="display:inline-block;transition:transform .25s;font-size:10px;opacity:0.6;">▾</span></button>
+        <div class="prod-dd" style="position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;background:#FBFAF8;border:1px solid rgba(38,29,27,0.12);border-radius:16px;box-shadow:0 20px 50px rgba(38,29,27,0.16);padding:10px;width:320px;z-index:120;">
+          <a href="playbook.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Frame AI Playbook</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Direct AI like a creative director</span></a>
+          <a href="skills.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Skills Pack</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">26 skills that run your brand</span></a>
+          <a href="campaign.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">AI Flow Creative Campaign</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">The full campaign masterclass</span></a>
+          <a href="engine.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">Claude Flow Content Engine</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Content on autopilot</span></a>
+        </div>
+      </div>
+      <a href="services.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Enterprise</a>
+      <a href="careers.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Careers</a>
+    </div>
+    <a href="#join" style="justify-self:end;font-family:'Public Sans';font-size:14px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:12px 26px;border-radius:10px;transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Join early</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO (teal band) -->
+<section style="padding:clamp(24px,4vh,48px) clamp(14px,2.5vw,26px) clamp(28px,4vh,56px);">
+  <div style="max-width:1320px;margin:0 auto;background:#173B40;color:#F3F1EE;border-radius:28px;padding:clamp(40px,7vh,96px) clamp(24px,5vw,72px);text-align:center;position:relative;overflow:hidden;">
+    <div style="display:inline-flex;align-items:center;gap:10px;background:#E6DED5;color:#173B40;border-radius:999px;padding:10px 22px;margin-bottom:26px;"><span style="width:7px;height:7px;border-radius:50%;background:#173B40;"></span><span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;">Coming October 10</span></div>
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:20px;">AI Flow · The Masterclass · Flagship</div>
+    <h1 style="font-family:'Public Sans';font-weight:800;font-size:clamp(36px,5.8vw,96px);line-height:0.96;letter-spacing:-0.045em;max-width:17ch;margin:0 auto 22px;">A full campaign, made by you. Built to sell at <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">scale.</em></h1>
+    <div style="max-width:720px;margin:0 auto clamp(22px,3.5vh,34px);border-radius:18px;overflow:hidden;background:#E6DED5;box-shadow:0 18px 50px rgba(0,0,0,0.28);"><image-slot id="camp-banner" shape="rect" placeholder="a full AI campaign – concept, model, shots and video" style="width:100%;height:380px;display:block;"></image-slot></div>
+    <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,21px);line-height:1.55;opacity:0.88;max-width:58ch;margin:0 auto clamp(32px,5vh,46px);">Learn to build full campaigns from start to finish – concept, model, shots, video and the final edit. What took a team and a month, now <em style="font-family:'DM Serif Display';font-style:italic;color:#E6DED5;">yours.</em></p>
+
+    <!-- EARLY ACCESS FORM -->
+    <div id="join" style="width:100%;max-width:540px;margin:0 auto;">
+      <sc-if value="{{ joined }}" hint-placeholder-val="{{ false }}">
+        <div style="background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.22);border-radius:16px;padding:28px 26px;">
+          <div style="font-family:'DM Serif Display';font-style:italic;font-size:24px;color:#E6DED5;margin-bottom:8px;">You're on the list.</div>
+          <p style="font-family:'Public Sans';font-size:15px;line-height:1.5;opacity:0.85;">Your 15% early-access discount is locked in. We'll email you the moment the masterclass opens on October 10.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ notJoined }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div data-joinrow style="display:flex;gap:10px;align-items:center;background:rgba(243,241,238,0.08);border:1px solid rgba(243,241,238,0.24);border-radius:14px;padding:8px 8px 8px 18px;">
+            <input type="email" value="{{ email }}" onInput="{{ onEmail }}" placeholder="your email" style="flex:1;background:none;border:none;outline:none;color:#F3F1EE;font-family:'Public Sans';font-size:16px;padding:12px 0;min-width:0;" />
+            <button onClick="{{ onJoin }}" style="flex-shrink:0;font-family:'Public Sans';font-size:15px;font-weight:700;letter-spacing:-0.01em;border:none;cursor:pointer;background:#F3F1EE;color:#173B40;padding:15px 26px;border-radius:10px;transition:transform .25s,background .25s;white-space:nowrap;" onmouseover="this.style.background='#E6DED5';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#F3F1EE';this.style.transform='none'">Join early · save 15%</button>
+          </div>
+          <p style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6;margin-top:14px;">Early list closes at launch · 15% off, locked in for life</p>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section style="background:#F3F1EE;padding:clamp(40px,6vh,80px) clamp(20px,5vw,56px) clamp(48px,8vh,100px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div style="text-align:center;max-width:60ch;margin:0 auto clamp(36px,5vh,56px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:16px;font-weight:600;">The Curriculum</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.6vw,68px);line-height:0.98;letter-spacing:-0.04em;">From blank page to a campaign that <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">converts.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.55;opacity:0.82;margin-top:16px;">The full workflow, in the order you'd actually build it – concept to converting ad, nothing skipped.</p>
+    </div>
+    <div data-mods style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <sc-for list="{{ modules }}" as="m" hint-placeholder-count="8">
+        <a href="#join" style="text-decoration:none;color:#261D1B;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:999px;padding:13px 22px;display:flex;gap:13px;align-items:center;box-shadow:0 2px 10px rgba(38,29,27,0.04);transition:transform .25s,box-shadow .25s,border-color .25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 30px rgba(38,29,27,0.1)';this.style.borderColor='rgba(23,59,64,0.4)';this.querySelector('[data-arr]').style.transform='translateX(4px)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 10px rgba(38,29,27,0.04)';this.style.borderColor='rgba(38,29,27,0.1)';this.querySelector('[data-arr]').style.transform='none'">
+          <span style="font-family:'JetBrains Mono';font-size:12px;color:#173B40;font-weight:600;flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1px solid rgba(23,59,64,0.3);display:flex;align-items:center;justify-content:center;">{{ m.num }}</span>
+          <div style="flex:1;min-width:0;">
+            <h3 style="font-family:'Public Sans';font-weight:700;font-size:clamp(16px,1.6vw,19px);letter-spacing:-0.02em;margin-bottom:3px;">{{ m.title }}</h3>
+            <p style="font-family:'Public Sans';font-size:13px;line-height:1.45;opacity:0.7;">{{ m.desc }}</p>
+          </div>
+          <span data-arr style="font-family:'DM Serif Display';font-style:italic;font-size:20px;color:#173B40;flex-shrink:0;transition:transform .25s;">→</span>
+        </a>
+      </sc-for>
+    </div>
+    <div style="text-align:center;margin-top:clamp(32px,5vh,48px);">
+      <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(17px,1.8vw,22px);color:#173B40;margin-bottom:24px;">Plus every workflow, template and tool map – revealed at launch.</p>
+      <a href="#join" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:19px 44px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.22);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Join early · save 15% →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="background:#173B40;padding:clamp(48px,8vh,110px) clamp(20px,5vw,56px);">
+  <div style="max-width:1080px;margin:0 auto;text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:16px;">early access</div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.045em;color:#F3F1EE;max-width:16ch;margin:0 auto clamp(24px,3.5vh,40px);">Learn it once. Produce <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">forever.</em></h2>
+  </div>
+  <div data-buy style="max-width:1040px;margin:0 auto;background:#F3F1EE;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,0.3);">
+    <div style="position:relative;min-height:300px;"><img src="assets/campaign-masterclass.png" alt="Campaign masterclass" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+    <div style="padding:clamp(24px,2.6vw,38px);display:flex;flex-direction:column;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#173B40;margin-bottom:6px;">AI Flow Creative Campaign</div>
+      <h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-0.03em;margin-bottom:16px;">What you get</h3>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(38,29,27,0.14);">
+        <sc-for list="{{ valueStack }}" as="v" hint-placeholder-count="7">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(38,29,27,0.1);">
+            <span style="font-family:'Public Sans';font-size:15.5px;font-weight:500;display:flex;align-items:center;gap:11px;line-height:1.35;"><span style="color:#173B40;font-size:13px;">✦</span>{{ v.label }}</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:18px;color:#173B40;white-space:nowrap;">{{ v.value }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0 0;">
+          <span style="font-family:'Public Sans';font-size:14px;font-weight:600;opacity:0.6;">Yours for life</span>
+          <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#173B40;">no subscription</span>
+        </div>
+      </div>
+      <div style="margin-top:auto;padding-top:20px;">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+          <span style="font-family:'Public Sans';font-weight:800;font-size:clamp(38px,4vw,54px);letter-spacing:-0.04em;line-height:1;">$637</span>
+          <span style="font-family:'Public Sans';font-weight:600;font-size:20px;opacity:0.4;text-decoration:line-through;">$749</span>
+          <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#173B40;background:rgba(23,59,64,0.1);border-radius:999px;padding:6px 11px;">15% off</span>
+        </div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">Early-list price · locked in for first members</div>
+        <a href="#join" style="display:block;text-align:center;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:17px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.28);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Lock in early access →</a>
+        <p style="margin-top:14px;font-family:'Public Sans';font-size:12px;line-height:1.5;text-align:center;opacity:0.5;">* A one-time purchase with lifetime access. Once the course is delivered, all sales are final and non-refundable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#261D1B;color:#F3F1EE;padding:clamp(48px,7vh,84px) clamp(20px,5vw,48px) clamp(28px,4vh,40px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-footcols style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(32px,5vw,64px);padding-bottom:clamp(36px,5vh,56px);border-bottom:1px solid rgba(243,241,238,0.14);">
+      <div>
+        <a href="index.html" style="display:inline-flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#F3F1EE;margin-bottom:18px;">
+          <span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Frame</span>
+          <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:26px;color:#E6DED5;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Flow</span><span style="font-family:'Geist';font-weight:300;font-size:15px;letter-spacing:0.02em;opacity:0.72;margin-left:6px;align-self:flex-end;">Club</span></span>
+        </a>
+        <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(16px,1.5vw,20px);line-height:1.35;color:#E6DED5;max-width:30ch;margin-bottom:22px;">Frame the eye. Flow the system. Ship the work.</p>
+        <div style="display:flex;gap:12px;">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F3F1EE" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="#F3F1EE" stroke="none"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#F3F1EE"><path d="M14 8.5V7c0-.9.3-1.5 1.7-1.5H17V2.6C16.5 2.5 15.5 2.4 14.4 2.4c-2.4 0-4 1.4-4 4.1v2H7.5V12h2.9v9.6H14V12h2.6l.4-3.5H14z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Products</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="playbook.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Frame AI Playbook</a>
+          <a href="skills.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Skills Pack</a>
+          <a href="campaign.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">AI Flow Creative Campaign</a>
+          <a href="engine.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Claude Flow Content Engine</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="index.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Home</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="terms.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Terms &amp; Conditions</a>
+          <a href="privacy.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;padding-top:24px;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.5;">© 2026 Frame &amp; Flow Club. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { email:'', joined:false };
+  onEmail = (e) => { this.setState({ email: e.target.value }); };
+  onJoin = () => { const em=(this.state.email||'').trim(); if(em.includes('@')){ try{window.location.href='mailto:hello@frameandflowclub.com?subject='+encodeURIComponent('Early access list')+'&body='+encodeURIComponent('Please add me to the early-access list: '+em);}catch(e){} this.setState({ joined:true }); } };
+  renderVals() {
+    const modules = [
+      { num:'01', title:'Concept & Creative Direction', desc:'Build the scroll-stopping idea from a blank page – the concept every converting campaign rests on.' },
+      { num:'02', title:'Your Brand Model', desc:'Create a realistic, consistent AI model you can shoot again and again – with or without a real person.' },
+      { num:'03', title:'Hero & Product Shots', desc:'Studio-grade hero and product shots in any setting – the look of a real shoot, without the shoot.' },
+      { num:'04', title:'Scenes, Seasons & Variants', desc:'Drop your product into any scene, and test new colours and variants before you ever produce them.' },
+      { num:'05', title:'Realistic Campaign Video', desc:'Turn stills into motion that looks genuinely filmed – for reels, ads and launches.' },
+      { num:'06', title:'UGC That Feels Real', desc:'Produce authentic, creator-style video that earns trust – without hiring a single creator.' },
+      { num:'07', title:'Social & Ad Creative', desc:'Turn it all into scroll-ready posts, banners and ad creative, designed for every platform.' },
+      { num:'08', title:'Edit into Converting Ads', desc:'Cut it into finished, animated ads built on sales psychology – work made to move product.' }
+    ];
+    const valueStack = [
+      { label:'The full masterclass – concept to converting ad', value:'the core' },
+      { label:'Your own model, hero shots, scenes & video', value:'every asset' },
+      { label:'UGC, social creative & converting ads', value:'every format' },
+      { label:'The Frame AI Playbook, included', value:'$89' },
+      { label:'The Skill Pack, included', value:'$97' },
+      { label:'The Claude Content Engine, included', value:'$299' },
+      { label:'Every future update, free', value:'for life' }
+    ];
+    return {
+      valueStack,
+      email: this.state.email,
+      joined: this.state.joined,
+      notJoined: !this.state.joined,
+      onEmail: this.onEmail,
+      onJoin: this.onJoin,
+      modules
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Public Sans'; src:url('fonts/PublicSans-Italic.ttf') format('truetype'); font-weight:100 900; font-style:italic; font-display:swap; }
+  @font-face { font-family:'DM Serif Display'; src:url('fonts/DMSerifDisplay-Italic.ttf') format('truetype'); font-weight:400; font-style:italic; font-display:swap; }
+  @font-face { font-family:'JetBrains Mono'; src:url('fonts/JetBrainsMono.ttf') format('truetype'); font-weight:100 800; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Archivo Black'; src:url('fonts/ArchivoBlack.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Bodoni Moda'; src:url('fonts/BodoniModa-Italic.ttf') format('truetype'); font-weight:400 800; font-style:italic; font-display:swap; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#F3F1EE; color:#261D1B; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; font-family:'Public Sans',system-ui,sans-serif; overflow-x:clip; }
+  ::selection{ background:#173B40; color:#F3F1EE; }
+  a{ color:inherit; }
+  [data-zf]{ overflow:hidden; }
+  [data-zf] image-slot{ display:block; width:100%; height:100%; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  [data-zf]:hover image-slot{ transform:scale(1.04); }
+  .prod-dd-wrap:hover .prod-dd{ opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+  .prod-dd-wrap:hover .prod-ddc{ transform:rotate(180deg); }
+  @media (max-width:920px){
+    [data-snap]{ grid-template-columns:repeat(2,1fr) !important; }
+    [data-skillgrid]{ grid-template-columns:repeat(2,1fr) !important; gap:8px !important; max-width:520px !important; }
+    [data-skillgrid] > div{ padding:11px 12px !important; gap:9px !important; flex-direction:column !important; }
+    [data-skillgrid] > div > div > div:first-child{ flex-wrap:wrap !important; }
+    [data-skillgrid] > div > div > div:last-child{ font-size:12.5px !important; }
+    [data-rev]{ column-count:1 !important; max-width:440px !important; margin:0 auto !important; }
+    [data-mctr]{ text-align:center !important; }
+    [data-mctr] p{ margin-left:auto !important; margin-right:auto !important; }
+    [data-mctr] h2{ margin-left:auto !important; margin-right:auto !important; }
+    [data-bcard]{ text-align:center !important; }
+    [data-bcard] > div:first-child{ justify-content:center !important; }
+    [data-bcard] p, [data-bcard] h2{ margin-left:auto !important; margin-right:auto !important; }
+    [data-bonusgrid]{ text-align:left !important; }
+    [data-bonusgrid]{ grid-template-columns:1fr !important; }
+    [data-chapters]{ grid-template-columns:1fr !important; }
+    [data-desktop-nav]{ display:none !important; }
+    [data-2]{ grid-template-columns:1fr !important; }
+    [data-3]{ grid-template-columns:1fr !important; }
+    [data-catgrid]{ grid-template-columns:repeat(2,1fr) !important; }
+    [data-footcols]{ grid-template-columns:1fr 1fr !important; }
+    [data-herorow]{ grid-template-columns:repeat(3,1fr) !important; }
+    [data-gal]{ column-count:2 !important; }
+    [data-chapters]{ grid-template-columns:1fr !important; }
+    [data-layers]{ grid-template-columns:1fr !important; }
+    [data-vdiv]{ border-right:0 !important; }
+    [data-hide-m]{ display:none !important; }
+  }
+
+  @media (max-width:560px){
+    header nav{ padding:10px 16px !important; gap:12px !important; }
+    header .prod-dd{ left:auto !important; right:0 !important; transform:translateY(6px) !important; width:min(300px,82vw) !important; }
+    .prod-dd-wrap:hover .prod-dd{ transform:translateY(0) !important; }
+    header a[href="#buy"], header a[href="#join"], header a[href="#call"], header a[href="#roles"], header a[href="#products"]{ padding:10px 16px !important; font-size:13px !important; }
+  }
+</style>
+<script src="image-slot.js"></script>
+</helmet>
+
+<div style="position:relative;width:100%;overflow-x:clip;">
+
+<!-- NAV -->
+<header style="position:sticky;top:0;z-index:100;backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);background:rgba(243,241,238,0.82);border-bottom:1px solid rgba(38,29,27,0.10);">
+  <nav style="max-width:1280px;margin:0 auto;padding:14px clamp(20px,5vw,48px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;">
+    <a href="index.html" style="justify-self:start;display:flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#261D1B;">
+      <span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Frame</span>
+      <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:22px;color:#173B40;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:20px;letter-spacing:-0.04em;">Flow</span></span>
+    </a>
+    <div style="justify-self:center;display:flex;align-items:center;gap:26px;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;">
+      <div class="prod-dd-wrap" style="position:relative;">
+        <button type="button" style="display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Public Sans';font-size:16px;font-weight:600;letter-spacing:-0.01em;color:#261D1B;opacity:0.85;transition:opacity .2s;padding:8px 0;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Products <span class="prod-ddc" style="display:inline-block;transition:transform .25s;font-size:10px;opacity:0.6;">▾</span></button>
+        <div class="prod-dd" style="position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;background:#FBFAF8;border:1px solid rgba(38,29,27,0.12);border-radius:16px;box-shadow:0 20px 50px rgba(38,29,27,0.16);padding:10px;width:320px;z-index:120;">
+          <a href="playbook.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Frame AI Playbook</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Direct AI like a creative director</span></a>
+          <a href="skills.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">The Skills Pack</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">26 skills that run your brand</span></a>
+          <a href="campaign.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">AI Flow Creative Campaign</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">The full campaign masterclass</span></a>
+          <a href="engine.html" style="display:block;text-decoration:none;color:#261D1B;padding:11px 14px;border-radius:10px;transition:background .18s;" onmouseover="this.style.background='#F3EEE9'" onmouseout="this.style.background='transparent'"><span style="font-family:'Public Sans';font-weight:700;font-size:15px;display:block;">Claude Flow Content Engine</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.62;">Content on autopilot</span></a>
+        </div>
+      </div>
+      <a href="services.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Enterprise</a>
+      <a href="careers.html" style="text-decoration:none;color:#261D1B;opacity:0.85;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">Careers</a>
+    </div>
+    <a href="#buy" style="justify-self:end;font-family:'Public Sans';font-size:14px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:12px 26px;border-radius:10px;transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Start now</a>
+    </div>
+  </nav>
+</header>
+
+<!-- 1 · HERO -->
+<section style="max-width:1280px;margin:0 auto;padding:clamp(40px,7vh,92px) clamp(20px,5vw,48px) clamp(28px,4vh,52px);text-align:center;">
+  <div style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(23,59,64,0.3);border-radius:999px;padding:9px 20px;margin-bottom:26px;"><span style="width:6px;height:6px;border-radius:50%;background:#173B40;"></span><span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:#173B40;font-weight:500;">The Skill Pack</span></div>
+  <h1 style="font-family:'Public Sans';font-weight:800;font-size:clamp(42px,6.6vw,116px);line-height:0.93;letter-spacing:-0.045em;max-width:16ch;margin:0 auto 24px;">Your whole team, built into <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">Claude.</em></h1>
+  <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,21px);line-height:1.5;opacity:0.82;max-width:60ch;margin:0 auto clamp(32px,5vh,48px);">26 ready-to-run Claude skills for content, marketing, sales, strategy and operations – trained on your brand and built to turn hours of work into finished results in <em style="font-family:'DM Serif Display';font-style:italic;color:#173B40;">minutes.</em></p>
+  <div data-skillgrid style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:1120px;margin:0 auto clamp(28px,4vh,40px);">
+    <sc-for list="{{ skills }}" as="s" hint-placeholder-count="23">
+      <div style="width:100%;display:flex;align-items:flex-start;text-align:left;gap:12px;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(38,29,27,0.03);transition:transform .2s,border-color .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(23,59,64,0.45)';this.style.boxShadow='0 8px 22px rgba(23,59,64,0.1)'" onmouseout="this.style.transform='none';this.style.borderColor='rgba(38,29,27,0.1)';this.style.boxShadow='0 1px 6px rgba(38,29,27,0.03)'">
+        <span style="flex-shrink:0;width:32px;height:32px;border-radius:9px;background:#F3EEE9;display:flex;align-items:center;justify-content:center;"><img src="assets/claude-logo.png" alt="" style="width:21px;height:21px;display:block;" /></span>
+        <div style="min-width:0;">
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <span style="font-family:'Public Sans';font-weight:800;font-size:13px;letter-spacing:-0.02em;color:#173B40;opacity:0.55;">{{ s.num }}</span>
+            <span style="font-family:'Public Sans';font-weight:700;font-size:14px;letter-spacing:-0.01em;line-height:1.2;">{{ s.name }}</span>
+            <sc-if value="{{ s.auto }}" hint-placeholder-val="{{ false }}"><span style="flex-shrink:0;font-family:'JetBrains Mono';font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;background:#173B40;color:#F3F1EE;padding:3px 8px;border-radius:999px;white-space:nowrap;">Automation ready</span></sc-if>
+          </div>
+          <div style="font-family:'Public Sans';font-size:13.5px;line-height:1.45;opacity:0.72;margin-top:6px;">{{ s.desc }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <a href="#buy" style="font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:19px 44px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.26);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the skills pack</a>
+    <div style="display:flex;align-items:center;gap:10px;"><span style="color:#173B40;font-size:13px;letter-spacing:1.5px;">★★★★★</span><span style="font-family:'Public Sans';font-size:13px;opacity:0.7;">26 skills · run in minutes · lifetime access</span></div>
+  </div>
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;margin-top:clamp(32px,4.5vh,50px);display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
+    <span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#173B40;background:rgba(23,59,64,0.07);border:1px solid rgba(23,59,64,0.16);border-radius:999px;padding:12px 22px;font-weight:600;">26 skills working for you</span>
+    <span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#173B40;background:rgba(23,59,64,0.07);border:1px solid rgba(23,59,64,0.16);border-radius:999px;padding:12px 22px;font-weight:600;">Hours back, every week</span>
+    <span style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#173B40;background:rgba(23,59,64,0.07);border:1px solid rgba(23,59,64,0.16);border-radius:999px;padding:12px 22px;font-weight:600;">No tech skills needed – ready to run</span>
+  </div>
+</section>
+
+<!-- 1.5 · BEGINNER BONUS -->
+<section style="padding:0 clamp(14px,2.5vw,26px) clamp(36px,5vh,64px);">
+  <div data-reveal data-bcard style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1120px;margin:0 auto;background:#FBFAF8;border:1.5px solid rgba(23,59,64,0.18);border-radius:24px;padding:clamp(28px,4.5vh,52px) clamp(22px,4vw,48px);box-shadow:0 14px 44px rgba(38,29,27,0.07);">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;">
+      <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#F3F1EE;background:#173B40;border-radius:999px;padding:7px 16px;font-weight:600;">Bonus · included free</span>
+    </div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(24px,3.4vw,44px);line-height:1.04;letter-spacing:-0.035em;max-width:24ch;margin:0 0 8px;">No brand yet? <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;">We'll build it with you.</em></h2>
+    <p style="font-family:'Public Sans';font-size:clamp(15px,1.3vw,18px);line-height:1.55;opacity:0.75;max-width:64ch;margin:0 0 clamp(24px,3.5vh,36px);">Three foundation skills that shape your whole brand identity – your voice, your look and your messaging – designed, documented and ready to use.</p>
+    <div data-bonusgrid style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <sc-for list="{{ bonusSkills }}" as="b" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:12px;background:#173B40;color:#F3F1EE;border-radius:16px;padding:22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="width:38px;height:38px;border-radius:10px;background:rgba(243,241,238,0.12);display:flex;align-items:center;justify-content:center;"><img src="assets/claude-logo.png" alt="" style="width:24px;height:24px;display:block;" /></span>
+            <span style="font-family:'Public Sans';font-weight:800;font-size:14px;letter-spacing:-0.02em;color:#E6DED5;opacity:0.6;">{{ b.num }}</span>
+          </div>
+          <div style="font-family:'Public Sans';font-weight:700;font-size:17px;letter-spacing:-0.015em;line-height:1.15;">{{ b.name }}</div>
+          <div style="font-family:'Public Sans';font-size:13.5px;line-height:1.5;opacity:0.82;">{{ b.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · WALKTHROUGH (teal band) -->
+<section style="padding:0 clamp(14px,2.5vw,26px) clamp(36px,5vh,64px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#173B40;color:#F3F1EE;border-radius:24px;padding:clamp(38px,6vh,80px) clamp(24px,5vw,64px);">
+    <div data-2 style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;">
+      <div data-mctr>
+        <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:18px;font-weight:600;">Never used Claude? Start here</div>
+        <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(28px,4vw,56px);line-height:1.02;letter-spacing:-0.04em;max-width:18ch;margin:0 0 18px;">We walk you through every <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">step.</em></h2>
+        <p style="font-family:'Public Sans';font-size:clamp(15px,1.3vw,18px);line-height:1.6;opacity:0.85;max-width:48ch;margin:0;">A short, step-by-step video shows you exactly how to set up and run your skills – from connecting Claude to your first finished result. Follow along once and you'll never feel stuck. No tech background needed.</p>
+      </div>
+      <div data-zf style="position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/10;box-shadow:0 18px 50px rgba(0,0,0,0.28);">
+        <image-slot id="sk-video" shape="rect" placeholder="walkthrough image" style="width:100%;height:100%;"></image-slot>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · THE LAYER SYSTEM (signature) -->
+<section style="padding:0 clamp(14px,2.5vw,26px) clamp(56px,9vh,120px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#FBFAF8;color:#261D1B;border:1px solid rgba(38,29,27,0.1);border-radius:24px;padding:clamp(28px,4vw,56px);box-shadow:0 18px 50px rgba(38,29,27,0.06);">
+    <div style="text-align:center;max-width:60ch;margin:0 auto clamp(20px,3.5vh,36px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:16px;">How It Works</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.8vw,72px);line-height:1.0;letter-spacing:-0.04em;margin-bottom:18px;">Trained on your brand. <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">Built to deliver.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(15px,1.5vw,18px);line-height:1.6;opacity:0.82;max-width:52ch;margin:0 auto;">You set your brand once. From then on every skill does more than answer – it returns finished, on-brand work you can publish, send or post the moment you <em style="font-family:'DM Serif Display';font-style:italic;color:#173B40;">ask.</em></p>
+    </div>
+    <div data-2 style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px);align-items:stretch;">
+      <!-- LEFT · simulated skill run -->
+      <div style="background:#173B40;color:#F3F1EE;border:1px solid rgba(23,59,64,0.2);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(23,59,64,0.14);">
+        <div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(243,241,238,0.1);">
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(243,241,238,0.25);"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(243,241,238,0.18);"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(243,241,238,0.12);"></span>
+          <span style="margin-left:8px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#E6DED5;">content-calendar.md</span>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:13px;flex:1;">
+          <div>
+            <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.5;margin-bottom:7px;">you</div>
+            <div style="font-family:'Public Sans';font-size:14px;line-height:1.45;background:rgba(243,241,238,0.07);border:1px solid rgba(243,241,238,0.12);border-radius:10px;padding:10px 14px;">Plan next month around our spring launch.</div>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#E6DED5;margin-bottom:9px;">skill · running</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;align-items:center;gap:10px;font-family:'Public Sans';font-size:13px;opacity:0.9;"><span style="color:#9ED0A8;">✓</span> Mapped four weeks to the launch</div>
+              <div style="display:flex;align-items:center;gap:10px;font-family:'Public Sans';font-size:13px;opacity:0.9;"><span style="color:#9ED0A8;">✓</span> Drafted 20 posts in your brand voice</div>
+              <div style="display:flex;align-items:center;gap:10px;font-family:'Public Sans';font-size:13px;opacity:0.9;"><span style="color:#9ED0A8;">✓</span> Formatted captions for each platform</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(243,241,238,0.1);padding-top:12px;">
+            <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.55;">done in 38s</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:15px;color:#E6DED5;">a month, ready.</span>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT · a second skill, delivered -->
+      <div style="background:#fff;color:#261D1B;border:1px solid rgba(38,29,27,0.12);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(38,29,27,0.08);">
+        <div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(38,29,27,0.1);background:#F3EEE9;">
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(38,29,27,0.18);"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(38,29,27,0.12);"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:rgba(38,29,27,0.08);"></span>
+          <span style="margin-left:8px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#173B40;">ad-variations.md</span>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:13px;flex:1;">
+          <div>
+            <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.45;margin-bottom:7px;">you</div>
+            <div style="font-family:'Public Sans';font-size:14px;line-height:1.45;background:#F6F3EF;border:1px solid rgba(38,29,27,0.1);border-radius:10px;padding:10px 14px;">Three ad angles for our serum launch.</div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#173B40;margin-bottom:9px;">skill · delivered</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="border:1px solid rgba(38,29,27,0.12);border-radius:10px;padding:9px 12px;background:#FCFBF9;">
+                <div style="font-family:'JetBrains Mono';font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#173B40;margin-bottom:4px;">the problem</div>
+                <div style="font-family:'Public Sans';font-size:13px;line-height:1.4;">Right routine, still dull? You’re missing one step.</div>
+              </div>
+              <div style="border:1px solid rgba(38,29,27,0.12);border-radius:10px;padding:9px 12px;background:#FCFBF9;">
+                <div style="font-family:'JetBrains Mono';font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#173B40;margin-bottom:4px;">the proof</div>
+                <div style="font-family:'Public Sans';font-size:13px;line-height:1.4;">Visibly fewer dark spots in 4 weeks – clinically tested.</div>
+              </div>
+              <div style="border:1px solid rgba(38,29,27,0.12);border-radius:10px;padding:9px 12px;background:#FCFBF9;">
+                <div style="font-family:'JetBrains Mono';font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#173B40;margin-bottom:4px;">the offer</div>
+                <div style="font-family:'Public Sans';font-size:13px;line-height:1.4;">Launch week only: the brightening serum, 20% off.</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(38,29,27,0.1);padding-top:12px;">
+            <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.5;">done in 24s</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:15px;color:#173B40;">3 angles, ready to test.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4c · TRANSITION BAND -->
+<section style="background:#F3F1EE;padding:clamp(28px,4vh,48px) clamp(20px,5vw,48px) clamp(14px,2vh,22px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1100px;margin:0 auto;text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:16px;font-weight:600;">The Shift</div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.6vw,68px);line-height:1.0;letter-spacing:-0.04em;max-width:20ch;margin:0 auto;">A whole team's output <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">without the payroll.</em></h2>
+  </div>
+</section>
+
+<!-- CATEGORY HOLOGRAMS -->
+<section style="background:#F3F1EE;padding:clamp(14px,2vh,24px) clamp(20px,5vw,48px) clamp(32px,4.5vh,56px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:640px;margin:0 auto clamp(18px,2.5vh,28px);text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:14px;font-weight:600;">Six departments, one pack</div>
+    <p style="font-family:'Public Sans';font-size:clamp(15px,1.4vw,18px);line-height:1.55;color:#261D1B;opacity:0.78;">Every skill sits in a department of the business it runs – set your brand once, and the whole team goes to work.</p>
+  </div>
+  <div data-catgrid style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:1120px;margin:0 auto;">
+    <sc-for list="{{ categories }}" as="c" hint-placeholder-count="5">
+      <div style="flex:1 1 320px;max-width:352px;position:relative;border-radius:16px;overflow:hidden;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);box-shadow:0 2px 12px rgba(38,29,27,0.04);transition:transform .25s,box-shadow .25s,border-color .25s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 38px rgba(23,59,64,0.13)';this.style.borderColor='rgba(23,59,64,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(38,29,27,0.04)';this.style.borderColor='rgba(38,29,27,0.1)'">
+        <div style="height:4px;background:#173B40;"></div>
+        <div style="padding:20px 20px;">
+          <div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:#173B40;opacity:0.7;margin-bottom:8px;">{{ c.tag }}</div>
+          <h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(16px,1.6vw,21px);letter-spacing:-0.03em;line-height:1.05;margin-bottom:12px;color:#261D1B;">{{ c.name }}</h3>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:9px;font-family:'Public Sans';font-size:13px;font-weight:600;line-height:1.25;color:#261D1B;padding:7px 0;border-top:1px solid rgba(38,29,27,0.08);"><span style="flex-shrink:0;width:18px;height:18px;border-radius:5px;background:rgba(23,59,64,0.08);display:flex;align-items:center;justify-content:center;"><img src="assets/claude-logo.png" alt="" style="width:12px;height:12px;display:block;" /></span>{{ it }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+
+<!-- 6 · WHO IT'S FOR -->
+<section id="who" style="background:#F3F1EE;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px) clamp(36px,5vh,64px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(40px,6vh,60px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;font-weight:600;">Who It's For</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.04em;">Built for every kind of <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">business.</em></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <sc-for list="{{ who }}" as="w" hint-placeholder-count="3">
+        <div data-2 style="{{ w.rowStyle }}">
+          <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+            <span style="{{ w.numStyle }}">{{ w.num }}</span>
+            <div style="min-width:0;">
+              <div style="{{ w.tagStyle }}">{{ w.tag }}</div>
+              <h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(20px,2vw,28px);letter-spacing:-0.03em;line-height:1.05;margin-top:4px;">{{ w.title }}</h3>
+            </div>
+          </div>
+          <div>
+            <p style="font-family:'Public Sans';font-size:clamp(14px,1.3vw,16px);line-height:1.5;opacity:0.84;margin-bottom:12px;">{{ w.desc }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ w.uses }}" as="u" hint-placeholder-count="3">
+                <span style="{{ w.chipStyle }}">{{ u }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="text-align:center;margin-top:clamp(40px,6vh,60px);"><a href="#buy" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:18px 40px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.22);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the skills pack</a></div>
+  </div>
+</section>
+
+<!-- 8 · REVIEWS -->
+<section id="reviews" style="background:#F3F1EE;padding:clamp(16px,2.5vh,36px) clamp(20px,5vw,48px) clamp(56px,9vh,120px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin:0 auto clamp(28px,4vh,44px);">
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">from the people using it</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.8vw,72px);line-height:0.98;letter-spacing:-0.04em;">Results worth talking <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">about.</em></h2>
+    </div>
+    <div data-rev style="column-count:3;column-gap:16px;">
+      <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="6">
+        <div style="break-inside:avoid;background:#FBFAF8;border:1px solid rgba(38,29,27,0.1);border-radius:16px;padding:26px;margin-bottom:16px;box-shadow:0 2px 12px rgba(38,29,27,0.04);">
+          <span style="color:#173B40;font-size:12px;letter-spacing:1px;">★★★★★</span>
+          <p style="font-family:'Public Sans';font-size:15px;line-height:1.55;font-weight:500;margin:12px 0 20px;">{{ r.quote }}</p>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <image-slot id="{{ r.slot }}" shape="circle" placeholder="photo" style="width:42px;height:42px;flex-shrink:0;"></image-slot>
+            <div><div style="font-family:'Public Sans';font-weight:600;font-size:14px;">{{ r.name }}</div><div style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.6;margin-top:2px;">{{ r.role }}</div></div>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(38,29,27,0.1);">
+            <div style="font-family:'JetBrains Mono';font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;opacity:0.45;margin-bottom:8px;">Skills they run</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ r.used }}" as="u" hint-placeholder-count="3">
+                <span style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:#173B40;background:rgba(23,59,64,0.07);border:1px solid rgba(23,59,64,0.16);border-radius:999px;padding:4px 9px;">{{ u }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · PRICING -->
+<section id="buy" style="background:#173B40;padding:clamp(40px,6vh,90px) clamp(20px,5vw,48px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1080px;margin:0 auto;text-align:center;">
+    <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#E6DED5;margin-bottom:16px;">get the skills</div>
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(34px,5vw,76px);line-height:0.98;letter-spacing:-0.045em;color:#F3F1EE;max-width:16ch;margin:0 auto clamp(24px,3.5vh,40px);">Your whole workload, <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">in one pack.</em></h2>
+  </div>
+  <div data-reveal data-2 style="opacity:0;transform:translateY(20px);transition:opacity .6s ease .08s,transform .6s ease .08s;max-width:1040px;margin:0 auto;background:#F3F1EE;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 80px rgba(0,0,0,0.3);">
+    <!-- left: the cover + what it is -->
+    <div data-zf style="position:relative;min-height:300px;"><image-slot id="sk-buy" shape="rect" placeholder="the skill pack" style="width:100%;height:100%;"></image-slot></div>
+    <!-- right: the value stack receipt -->
+    <div style="padding:clamp(24px,2.6vw,38px);display:flex;flex-direction:column;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#173B40;margin-bottom:6px;">The Skill Pack</div>
+      <h3 style="font-family:'Public Sans';font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-0.03em;margin-bottom:16px;">What you get</h3>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(38,29,27,0.14);">
+        <sc-for list="{{ valueStack }}" as="v" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid rgba(38,29,27,0.1);">
+            <span style="font-family:'Public Sans';font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;"><span style="color:#173B40;">✦</span>{{ v.label }}</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:16px;color:#173B40;white-space:nowrap;">{{ v.value }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0 0;">
+          <span style="font-family:'Public Sans';font-size:14px;font-weight:600;opacity:0.6;">Yours for life</span>
+          <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#173B40;">no subscription</span>
+        </div>
+      </div>
+      <div style="margin-top:auto;padding-top:20px;">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+          <span style="font-family:'Public Sans';font-weight:800;font-size:clamp(38px,4vw,54px);letter-spacing:-0.04em;line-height:1;">$97</span>
+        </div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">Yours for life · no subscription</div>
+        <a href="https://buy.stripe.com/bJeeVd0YQ6D65386sDfMA01" target="_blank" rel="noopener" style="display:block;text-align:center;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#173B40;color:#F3F1EE;padding:17px;border-radius:12px;box-shadow:0 14px 40px rgba(23,59,64,0.28);transition:transform .25s,background .25s;" onmouseover="this.style.background='#0f2a2e';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#173B40';this.style.transform='none'">Get the skills pack</a>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;">★★★★★ &nbsp;instant access · lifetime updates</div>
+        <p style="margin-top:14px;font-family:'Public Sans';font-size:12px;line-height:1.5;text-align:center;opacity:0.5;">* A one-time purchase with lifetime access. As the skills are delivered instantly, all sales are final and non-refundable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 10 · FAQ -->
+<section style="background:#F3F1EE;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px);">
+  <div style="max-width:1000px;margin:0 auto;">
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;text-align:center;margin-bottom:40px;">
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,5vw,72px);line-height:0.96;letter-spacing:-0.04em;">before you <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">start.</em></h2>
+    </div>
+    <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;border-top:1px solid rgba(38,29,27,0.15);">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="4">
+        <div style="border-bottom:1px solid rgba(38,29,27,0.15);">
+          <button onClick="{{ f.toggle }}" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#261D1B;">
+            <span style="font-family:'Public Sans';font-weight:700;font-size:clamp(16px,1.8vw,21px);letter-spacing:-0.02em;">{{ f.q }}</span>
+            <span style="font-family:'DM Serif Display';font-style:italic;font-size:26px;color:#173B40;line-height:1;flex-shrink:0;width:24px;text-align:center;">{{ f.sign }}</span>
+          </button>
+          <div style="{{ f.answerStyle }}"><p style="font-family:'Public Sans';font-size:16px;line-height:1.65;opacity:0.8;padding-bottom:24px;max-width:74ch;">{{ f.a }}</p></div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · MENTOR -->
+<section style="background:#E6DED5;padding:clamp(56px,9vh,120px) clamp(20px,5vw,48px);">
+  <div data-reveal data-2 style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(32px,5vw,80px);align-items:center;">
+    <div data-zf style="aspect-ratio:4/5;border-radius:18px;overflow:hidden;"><img src="assets/lior-portrait.png" alt="Lior" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+    <div>
+      <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#173B40;margin-bottom:18px;">the face behind</div>
+      <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(30px,3.8vw,56px);line-height:1.0;letter-spacing:-0.04em;margin-bottom:24px;">Hi, I'm <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#173B40;">Lior.</em></h2>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.65;opacity:0.84;margin-bottom:18px;">I believe the real breakthrough with AI isn't finding a better prompt – it's turning the work you do every day into skills: trained once on a brand, then run in seconds, on demand. That belief is what this whole pack is built on.</p>
+      <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);line-height:1.65;opacity:0.84;margin-bottom:26px;">These twenty-six skills are the exact system I run – the calendars, captions, ads, scripts and admin that used to eat whole days, now handled. I packaged them so you can set up the same engine for your own brand, without the years of trial and error.</p>
+      <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(18px,2vw,26px);line-height:1.35;color:#173B40;">Set it up once, and the work that takes most people hours will take you minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · FINAL CTA -->
+<section style="background:#F3F1EE;padding:0 clamp(14px,2.5vw,26px) clamp(20px,3vh,40px);">
+  <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;max-width:1440px;margin:0 auto;background:#173B40;color:#F3F1EE;border-radius:24px;padding:clamp(64px,12vh,150px) clamp(20px,5vw,56px);text-align:center;">
+    <h2 style="font-family:'Public Sans';font-weight:800;font-size:clamp(32px,4.6vw,68px);line-height:0.98;letter-spacing:-0.04em;margin-bottom:22px;max-width:20ch;margin-left:auto;margin-right:auto;">Your content team is ready. <em style="font-family:'DM Serif Display';font-style:italic;font-weight:400;color:#E6DED5;">Press go.</em></h2>
+    <p style="font-family:'Public Sans';font-size:clamp(16px,1.5vw,20px);opacity:0.85;margin-bottom:34px;max-width:52ch;margin-left:auto;margin-right:auto;">Twenty-six skills, trained to your brand, handling the work around your content – so your hours go back to the part only you can do.</p>
+    <a href="#buy" style="display:inline-block;font-family:'Public Sans';font-size:16px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;background:#F3F1EE;color:#261D1B;padding:20px 46px;border-radius:12px;transition:transform .25s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">Get the skills pack</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#261D1B;color:#F3F1EE;padding:clamp(48px,7vh,84px) clamp(20px,5vw,48px) clamp(28px,4vh,40px);">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div data-footcols style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(32px,5vw,64px);padding-bottom:clamp(36px,5vh,56px);border-bottom:1px solid rgba(243,241,238,0.14);">
+      <div>
+        <a href="index.html" style="display:inline-flex;flex-direction:column;line-height:0.8;text-decoration:none;color:#F3F1EE;margin-bottom:18px;">
+          <span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Frame</span>
+          <span style="display:flex;align-items:baseline;"><span style="font-family:'Bodoni Moda';font-style:italic;font-weight:600;font-size:26px;color:#E6DED5;margin-right:2px;line-height:0.8;">&amp;</span><span style="font-family:'Archivo Black';font-size:24px;letter-spacing:-0.04em;">Flow</span><span style="font-family:'Geist';font-weight:300;font-size:15px;letter-spacing:0.02em;opacity:0.72;margin-left:6px;align-self:flex-end;">Club</span></span>
+        </a>
+        <p style="font-family:'DM Serif Display';font-style:italic;font-size:clamp(16px,1.5vw,20px);line-height:1.35;color:#E6DED5;max-width:30ch;margin-bottom:22px;">Frame the eye. Flow the system. Ship the work.</p>
+        <div style="display:flex;gap:12px;">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F3F1EE" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="#F3F1EE" stroke="none"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" style="width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,241,238,0.25);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;" onmouseover="this.style.background='#173B40';this.style.borderColor='#173B40'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(243,241,238,0.25)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#F3F1EE"><path d="M14 8.5V7c0-.9.3-1.5 1.7-1.5H17V2.6C16.5 2.5 15.5 2.4 14.4 2.4c-2.4 0-4 1.4-4 4.1v2H7.5V12h2.9v9.6H14V12h2.6l.4-3.5H14z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Products</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="playbook.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Frame AI Playbook</a>
+          <a href="skills.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">The Skills Pack</a>
+          <a href="campaign.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">AI Flow Creative Campaign</a>
+          <a href="engine.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Claude Flow Content Engine</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="index.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Home</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#E6DED5;opacity:0.6;margin-bottom:18px;">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-family:'Public Sans';font-size:15px;">
+          <a href="terms.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Terms &amp; Conditions</a>
+          <a href="privacy.html" style="text-decoration:none;color:#F3F1EE;opacity:0.82;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.82">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;padding-top:24px;">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.5;">© 2026 Frame &amp; Flow Club. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { faqOpen: 0 };
+  componentDidMount() {
+    try {
+      const els = [...document.querySelectorAll('[data-reveal]')];
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='none'; io.unobserve(e.target); } });
+      }, { rootMargin:'0px 0px -8% 0px', threshold:0.04 });
+      els.forEach(el => io.observe(el));
+      this._fb = setTimeout(()=>els.forEach(el=>{el.style.opacity='1';el.style.transform='none';}),2600);
+    } catch(e){}
+  }
+  componentWillUnmount(){ clearTimeout(this._fb); }
+  toggleFaq(i){ this.setState(s=>({ faqOpen: s.faqOpen===i?-1:i })); }
+  renderVals() {
+    const chapters = [
+      { num:'01', title:'Content Calendar', desc:'Plan and theme a month of posts in one sitting, mapped to your launches.' },
+      { num:'02', title:'Creative Brief', desc:'Turn a rough idea into a clear, on-brand brief in two minutes.' },
+      { num:'03', title:'Caption & Hook', desc:'Scroll-stopping hooks, captions and CTAs that sound like you.' },
+      { num:'04', title:'UGC Script', desc:'Natural, creator-style scripts that feel real and convert.' },
+      { num:'05', title:'Video Script', desc:'Short-form scripts and hooks built for reels and ads.' },
+      { num:'06', title:'Branded PDF', desc:'Turn content into polished one-pagers, guides and lead magnets.' },
+      { num:'07', title:'Content Ops', desc:'Organise assets, approvals and your whole workflow in one place.' },
+      { num:'08', title:'Repurpose', desc:'Turn one idea into a week of posts across every platform.' },
+      { num:'09', title:'Analytics Readout', desc:'Turn last week\u2019s numbers into next week\u2019s plan.' }
+    ];
+    const whoData = [
+      { num:'01', tone:'cream', slot:'pb-who1', ph:'brand owner at work', title:'Brand owners & founders', tag:'do more with less', desc:'Run a brand that looks bigger than your team. Hand the repetitive work to skills and keep your hours for the calls only you can make.', uses:['Carousel Builder','Caption & Hashtags','Email Newsletter'] },
+      { num:'02', tone:'teal', slot:'pb-who2', ph:'agency team', title:'Agencies & teams', tag:'scale without hiring', desc:'Take on more clients without more headcount. Brief, write and produce on-brand content for every client in a fraction of the time.', uses:['Ad-Creative Brief','Ad Copy & Variations','Proposal & Quote'] },
+      { num:'03', tone:'cream', slot:'pb-who3', ph:'creator filming', title:'Creators & freelancers', tag:'show up everywhere', desc:'Post consistently without burning out. Plan and write a full week of content in one sitting \u2013 in a voice that stays yours.', uses:['Hook Generator','UGC / Influencer Script','Stories Builder'] }
+    ];
+    const who = whoData.map((w,i) => {
+      const teal = w.tone==='teal';
+      const imgRight = i % 2 === 1;
+      return {
+        num:w.num, title:w.title, desc:w.desc, tag:w.tag, uses:w.uses,
+        rowStyle: { display:'grid', gridTemplateColumns:'0.9fr 1.3fr', gap:'clamp(20px,3vw,48px)', alignItems:'center', background: teal?'#173B40':'#FBFAF8', color: teal?'#F3F1EE':'#261D1B', border: teal?'1px solid #173B40':'1px solid rgba(38,29,27,0.1)', borderRadius:'16px', padding:'clamp(16px,1.8vw,24px) clamp(18px,2.2vw,32px)', boxShadow:'0 2px 14px rgba(38,29,27,0.04)' },
+        numStyle: { fontFamily:"'Public Sans'", fontWeight:800, fontSize:'clamp(28px,2.6vw,40px)', letterSpacing:'-0.04em', lineHeight:1, color: teal?'#E6DED5':'#173B40' },
+        tagStyle: { fontFamily:"'JetBrains Mono'", fontSize:'10px', letterSpacing:'0.22em', textTransform:'uppercase', fontWeight:600, color: teal?'#E6DED5':'#173B40' },
+        chipStyle: { fontFamily:"'Public Sans'", fontSize:'12.5px', fontWeight:600, letterSpacing:'-0.01em', padding:'8px 14px', borderRadius:'999px', background: teal?'rgba(243,241,238,0.12)':'rgba(23,59,64,0.07)', border: teal?'1px solid rgba(243,241,238,0.22)':'1px solid rgba(23,59,64,0.16)', color: teal?'#F3F1EE':'#173B40' }
+      };
+    });
+    const reviews = [
+      { slot:'pb-r1', name:'Maya L.', role:'Skincare Brand \u00b7 Carousel Builder', used:['Content Calendar','Carousel','Caption Writer','Stories','Hook Generator','SEO Content','Trend Radar'], quote:'"Our carousels look studio-made and we post daily without a designer. Engagement doubled and it\u2019s driving real sales."' },
+      { slot:'pb-r2', name:'Noa B.', role:'Content Creator \u00b7 UGC Script', used:['UGC Script','Hook Generator','Caption Writer','Stories','Content Calendar'], quote:'"I film straight off the scripts. They convert so well my brand deals have nearly tripled this year."' },
+      { slot:'pb-r3', name:'Ethan M.', role:'Performance Marketer \u00b7 Ad Copy', used:['Meta Ads','Ad-Creative Brief','Landing Page','Hook Generator','Competitor Scan','Monthly Report'], quote:'"Ten ad angles in a morning. We cut our cost-per-lead by a third in the first month."' },
+      { slot:'pb-r4', name:'Dana K.', role:'Founder \u00b7 SEO Writer', used:['SEO Content','Content Calendar','Caption Writer','Landing Page','Monthly Report'], quote:'"Organic traffic is up 40% and the articles pull in leads while I sleep \u2013 for less than one freelance post."' },
+      { slot:'pb-r5', name:'Lena S.', role:'Boutique Owner \u00b7 Newsletter', used:['Email Newsletter','Caption Writer','Carousel','Content Calendar','Cold Outreach','Stories'], quote:'"Ten-minute newsletters in my voice, and email is now my biggest sales channel. It paid for itself week one."' },
+      { slot:'pb-r6', name:'Adam R.', role:'Coach \u00b7 Branded PDF', used:['Branded PDF Guide','Cold Outreach','Proposal & Quote','Landing Page','Presentation'], quote:'"Built a lead magnet in an afternoon. It added hundreds to my list and booked out my calls."' }
+    ];
+    const includes = ['23 skills plus 3 brand foundations – 26 in all','Content calendar & repurpose engine','Briefs, captions, hooks and scripts','Branded PDF & lead-magnet builder','Content ops & approval workflow','Lifetime access & every new skill, free'];
+    const faqData = [
+      { q:'Do I need Claude to use these?', a:'Yes. The skills run inside Claude, Anthropic\u2019s AI. A free account lets you try it, but the skills feature runs on a paid plan \u2013 see below. The walkthrough video shows you exactly how to set it up in a few minutes.' },
+      { q:'Which Claude plan do you recommend?', a:'Claude Pro (around $20/month) is all you need \u2013 it unlocks Skills and Claude Code, which is what these run on. If you create at high volume or want the newest models, Max gives you more headroom, but Pro is the sweet spot for most brands.' },
+      { q:'Do I need any experience with AI?', a:'No. Each skill comes ready to run, and the step-by-step video walks you through everything \u2013 from creating your Claude account to running your first skill. If you can copy and paste, you can do this.' },
+      { q:'How is this different from just prompting Claude myself?', a:'A prompt starts from scratch every time and still needs fixing. These are built and tested skills, each trained on your brand, so they return finished, on-brand work in seconds \u2013 instead of you wording, re-wording and cleaning up generic output.' },
+      { q:'Will it actually sound like my brand?', a:'Yes. You define your voice, audience and offers once with the brand-setup skills, and every other skill writes and designs in it \u2013 the opposite of generic AI.' },
+      { q:'What exactly do I get?', a:'Twenty-six skills across content, sales and admin \u2013 carousels, captions, hooks, ad copy, landing pages, scripts, newsletters, proposals, reports and more \u2013 plus the brand-setup bonuses, the walkthrough video and every future skill, free.' },
+      { q:'I\u2019m starting from zero \u2013 is that a problem?', a:'Not at all. The included brand-setup skills build your voice, look and messaging first, so you have a real brand foundation in place before you run anything else.' },
+      { q:'How fast can I see results?', a:'The brand setup takes about fifteen minutes; after that each skill runs in seconds. In your first sitting you can realistically finish something usable \u2013 a batch of posts, an email or a first draft you only need to tweak.' },
+      { q:'Is it a one-time payment?', a:'Yes. Pay once, get instant access and keep it for good \u2013 and every new skill we add lands in your pack for free.' },
+      { q:'Can I get a refund?', a:'Because the skills are delivered instantly on purchase, all sales are final and we don\u2019t offer refunds. In return you keep everything for life, and every new skill we add lands in your pack for free.' }
+    ];
+    const faqs = faqData.map((f,i)=>{ const open=this.state.faqOpen===i; return { q:f.q, a:f.a, sign: open?'\u2013':'+', toggle:()=>this.toggleFaq(i), answerStyle:{ overflow:'hidden', maxHeight: open?'280px':'0px', opacity: open?1:0, transition:'max-height .5s cubic-bezier(.2,.7,.2,1), opacity .4s' } }; });
+    const tools = [
+      { slot:'pb-tool-1', ph:'planning', kind:'for planning', title:'Plan a month in minutes', desc:'The calendar skill maps a full month of themed, scheduled posts to your launches \u2013 so you never open a blank planner again.' },
+      { slot:'pb-tool-2', ph:'writing', kind:'for writing', title:'Write in your voice', desc:'Briefs, captions, hooks and scripts that already sound like your brand \u2013 set your tone once and every draft lands close to final.' },
+      { slot:'pb-tool-3', ph:'packaging', kind:'for packaging', title:'Package it like a pro', desc:'Turn raw content into polished branded PDFs, guides and lead magnets \u2013 the kind people actually save and share.' },
+      { slot:'pb-tool-4', ph:'repurposing', kind:'for repurposing', title:'Turn one into many', desc:'One idea becomes a week of posts across every platform \u2013 repurposed, reformatted and ready to schedule.' }
+    ];
+    const bonuses = [
+      { num:'01', title:'Brand Voice Setup', value:'do this first', desc:'Lock your tone, audience and offers once; every skill speaks in it from then on.' },
+      { num:'02', title:'The Content Hub Template', value:'stay organised', desc:'A ready-to-use board to plan, draft and approve everything in one place.' },
+      { num:'03', title:'Hook & CTA Swipe File', value:'never stuck', desc:'100+ proven openers and calls to action to drop in whenever you stall.' },
+      { num:'04', title:'Tool & App Discounts', value:'save more', desc:'Deals on the apps we actually use to run all of this.' }
+    ];
+    const skills = [
+      { name:'Content Calendar', cat:'Content & social', auto:true, desc:'Never open a blank calendar again \u2013 a full month mapped to your brand, your rivals and what is trending right now.' },
+      { name:'Carousel', cat:'Content & social', desc:'Turns a topic into a finished, on-brand carousel \u2013 written and designed in your colours, fonts and voice, built to hold the swipe.' },
+      { name:'Hook Generator', cat:'Content & social', desc:'Scroll-stopping openers for any post, reel or ad \u2013 so the first line never costs you the view.' },
+      { name:'Caption Writer', cat:'Content & social', desc:'A ready-to-post caption in your brand voice \u2013 hook, body and the right hashtags, built for reach.' },
+      { name:'UGC Script', cat:'Content & social', desc:'Ready-to-film UGC scripts in your brand voice \u2013 built on the structures that convert, ready to shoot.' },
+      { name:'Stories', cat:'Content & social', desc:'A full Instagram Story sequence \u2013 polls, questions and teasers that drive replies, taps and DMs, on brand.' },
+      { name:'Meta Ads', cat:'Marketing & sales', desc:'Ready-to-run Meta ad copy in multiple angles \u2013 so you can test fast and find what sells.' },
+      { name:'Landing Page', cat:'Marketing & sales', desc:'Full landing-page copy and layout in your brand \u2013 every section structured to turn visitors into buyers.' },
+      { name:'Email Newsletter', cat:'Marketing & sales', auto:true, desc:'Newsletters and full email sequences in your voice \u2013 welcome, launch and win-back flows that drive sales.' },
+      { name:'Ad-Creative Brief', cat:'Marketing & sales', desc:'A clear creative brief for any ad \u2013 tells your designer or editor exactly what to make, on brand.' },
+      { name:'SEO Content', cat:'Research & strategy', auto:true, desc:'Ready-to-publish SEO articles in your brand \u2013 written to rank on Google and in AI search.' },
+      { name:'Branded PDF Guide', cat:'Operations & reporting', desc:'A designed lead magnet in your brand \u2013 a polished PDF guide you give away to capture emails.' },
+      { name:'Competitor Scan', cat:'Research & strategy', auto:true, desc:'A clear read on your market and competitors \u2013 what is working in your space, and the gap your brand can own.' },
+      { name:'Trend Radar', cat:'Research & strategy', auto:true, desc:'The trends worth acting on for your brand \u2013 each with a clear way to turn it into content that fits you.' },
+      { name:'Cold Outreach', cat:'Marketing & sales', desc:'Cold emails and DMs that get replies \u2013 personalised first-contact messages people actually answer.' },
+      { name:'Proposal & Quote', cat:'Clients & money', desc:'A designed, on-brand proposal and quote \u2013 clear scope and price, ready to send and win the client.' },
+      { name:'Monthly Report', cat:'Operations & reporting', auto:true, desc:'A designed report of your content and marketing performance \u2013 what grew, what to change, and the plan for next month.' },
+      { name:'Presentation', cat:'Operations & reporting', desc:'A designed deck plus a speaker script \u2013 everything you need to present with confidence, on brand.' },
+      { name:'Meeting Notes', cat:'Clients & money', desc:'Meeting notes into action items and a recap email \u2013 so nothing gets forgotten after the call.' },
+      { name:'Email Responder', cat:'Clients & money', desc:'A written reply to any email in seconds \u2013 clear, professional and in your brand tone.' },
+      { name:'Invoice', cat:'Clients & money', auto:true, desc:'A compliant, on-brand invoice for any client, ready to send \u2013 and set it to go out automatically each month for retainer clients.' },
+      { name:'Contract Draft', cat:'Clients & money', desc:'A clear service agreement drafted for you \u2013 a solid first version to run past your lawyer.' },
+      { name:'SOP Builder', cat:'Operations & reporting', desc:'Turns how you work into a step-by-step SOP \u2013 so you can hand any task to your team.' }
+    ];
+    const categories = [
+      { name:'Content & social', tag:'the daily feed', items:['Content Calendar','Carousel','Hook Generator','Caption Writer','UGC Script','Stories'] },
+      { name:'Marketing & sales', tag:'turn attention into sales', items:['Landing Page','Meta Ads','Ad-Creative Brief','Email Newsletter','Cold Outreach'] },
+      { name:'Research & strategy', tag:'know the field first', items:['SEO Content','Competitor Scan','Trend Radar'] },
+      { name:'Clients & money', tag:'from reply to paid', items:['Proposal & Quote','Meeting Notes','Email Responder','Invoice','Contract Draft'] },
+      { name:'Operations & reporting', tag:'run the whole system', items:['Branded PDF Guide','Presentation','Monthly Report','SOP Builder'] }
+    ];
+    const bonusSkills = [
+      { name:'Brand Onboarding', file:'brand-onboarding.md', desc:'The one setup that makes everything sound like you \u2013 a short interview (or your brand book) becomes the profile every skill reads before it writes a word.' },
+      { name:'Brand Book Creator', file:'brand-book-creator.md', desc:'No brand yet? Builds a complete, designed brand book from scratch \u2013 strategy, voice, colours, type \u2013 and sets your brand profile too.' },
+      { name:'Brand Copywriter', file:'brand-copywriter.md', desc:'The voice engine behind every writing skill \u2013 it keeps your banned words out and signature phrases in, so nothing ever reads like generic AI.' }
+    ];
+    const valueStack = [
+      { label:'Plan & create a month of content in one sitting', value:'the core' },
+      { label:'Captions, carousels, scripts and emails in your voice', value:'26 skills' },
+      { label:'Ad copy, landing pages and outreach that sell', value:'more sales' },
+      { label:'Proposals, invoices, reports and SOPs, handled', value:'less admin' },
+      { label:'Your brand defined once, used across everything', value:'set once' },
+      { label:'Every new skill we add, yours free', value:'for life' }
+    ];
+    return { chapters, who, reviews, includes, faqs, tools, bonuses, valueStack, categories, skills: skills.map((s,i)=>({ ...s, num: String(i+1).padStart(2,'0') })), bonusSkills: bonusSkills.map((b,i)=>({ ...b, num: String(i+24) })) };
+  }
+}
+</script>
+</body>
+</html>
