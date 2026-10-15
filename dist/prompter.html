@@ -1,0 +1,471 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><title>פרומפטר frame & flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a library of reels (easy → hard) that opens into a full-screen prompter with a fixed reading line. Single dark look on purpose: prompters read best light-on-dark. */
+:root{
+  --espresso:#14100d; --ink:#1d1814; --line:#2e2620;
+  --bone:#f2ebe0; --sand:#b9a891; --mute:#7d6f60;
+  --teal:#5fb3ad; --gold:#e3b75b;
+  --f-read:"Heebo","Assistant",system-ui,sans-serif;
+  --f-disp:"Frank Ruhl Libre","David",Georgia,serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--espresso);color:var(--bone);font-family:var(--f-read);direction:rtl;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+/* ---------- library ---------- */
+#lib{max-width:880px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--sand);text-transform:uppercase}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(34px,7vw,56px);line-height:1.05;margin:10px 0 8px;text-wrap:balance}
+.sub{color:var(--sand);font-size:16px;line-height:1.6;max-width:58ch;margin:0 0 26px}
+.keys{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--mute);margin-bottom:26px}
+.keys kbd{font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--sand);margin-inline-end:4px}
+.list{display:grid;gap:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:14px;padding:16px 4px;border-bottom:1px solid var(--line);text-align:right;width:100%}
+.row:hover{background:var(--ink)}
+.num{font-family:var(--f-mono);font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.rt{min-width:0}
+.rt b{display:block;font-size:18px;font-weight:500;line-height:1.35}
+.rt span{display:block;font-size:13px;color:var(--sand);margin-top:3px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip{font-family:var(--f-mono);font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--sand);white-space:nowrap}
+.chip.l1{color:var(--teal);border-color:color-mix(in srgb,var(--teal) 45%,transparent)}
+.chip.l2{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+.chip.l3{color:#e07a5f;border-color:#e07a5f66}
+.done .rt b{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--mute)}
+.foot{margin-top:30px;font-size:13px;color:var(--mute)}
+@media (max-width:560px){.row{grid-template-columns:30px 1fr}.chips{grid-column:2;justify-content:flex-start}}
+
+/* ---------- prompter ---------- */
+#pr{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;z-index:5}
+#stage{position:relative;flex:1;overflow:hidden;cursor:pointer}
+#flip{position:absolute;inset:0}
+#flip.mirror{transform:scaleX(-1)}
+#flip.mirrorv{transform:scaleY(-1)}
+#flip.mirror.mirrorv{transform:scale(-1,-1)}
+#scroll{position:absolute;left:0;right:0;top:0;will-change:transform;padding-left:max(6vw,env(safe-area-inset-left,0px));padding-right:max(6vw,env(safe-area-inset-right,0px))}
+#scroll[dir=ltr]{text-align:left}
+.cap{font-family:var(--f-mono);font-size:max(13px,.28em);color:var(--mute);letter-spacing:.1em;padding-bottom:.6em;border-bottom:1px solid #222;margin-bottom:1em}
+.ln{padding:.35em 0 .55em;transition:opacity .25s;opacity:.38;line-height:1.38}
+.ln.on{opacity:1}
+.tc{display:block;font-family:var(--f-mono);font-size:max(12px,.26em);color:var(--mute);letter-spacing:.06em;margin-bottom:.15em}
+.me{color:#fff;font-weight:500}
+.clone{display:block;color:var(--teal);font-family:var(--f-disp);font-style:italic;font-size:.78em;margin:.2em 0}
+.clone::before{content:"🔊 הקול · ";font-family:var(--f-mono);font-style:normal;font-size:.42em;letter-spacing:.08em;vertical-align:middle;color:var(--teal);opacity:.8}
+[dir=ltr] .clone::before{content:"🔊 VOICE · "}
+.tag{font-family:var(--f-mono);font-size:.45em;color:var(--gold);border:1px solid #e3b75b55;border-radius:4px;padding:0 .4em;vertical-align:middle;margin:0 .2em}
+.dir{display:block;font-size:.42em;color:var(--sand);font-style:italic;margin:.25em 0;line-height:1.5}
+.osc{display:inline-block;font-family:var(--f-mono);font-size:.36em;color:var(--mute);border:1px dashed #3a3029;padding:.1em .5em;border-radius:4px;margin-top:.3em}
+.nodir .dir,.nodir .osc,.nodir .tc{display:none}
+.endmark{font-family:var(--f-mono);font-size:max(14px,.3em);color:var(--mute);text-align:center;padding:1em 0 70vh}
+#scroll [contenteditable=true]{outline:1px dashed #5fb3ad66;outline-offset:4px;cursor:text}
+
+#mark{position:absolute;left:0;right:0;top:var(--mark,30%);height:0;pointer-events:none}
+#mark::before,#mark::after{content:"";position:absolute;top:-9px;border:9px solid transparent}
+#mark::before{right:4px;border-right-color:var(--gold)}
+#mark::after{left:4px;border-left-color:var(--gold)}
+#band{position:absolute;left:0;right:0;top:calc(var(--mark,30%) - 1.1em);height:2.2em;background:linear-gradient(transparent,#ffffff0a 40%,#ffffff0a 60%,transparent);pointer-events:none}
+#fadeT,#fadeB{position:absolute;left:0;right:0;pointer-events:none}
+#fadeT{top:0;height:12%;background:linear-gradient(#000,transparent)}
+#fadeB{bottom:0;height:18%;background:linear-gradient(transparent,#000)}
+
+#count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-disp);font-size:min(40vw,240px);color:var(--gold);background:#000c;pointer-events:none}
+#hud{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;gap:10px;font-family:var(--f-mono);font-size:12px;color:var(--mute);pointer-events:none;transition:opacity .3s}
+#hud b{color:var(--bone);font-weight:600}
+#rec{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e04d3c;margin-inline-end:6px;opacity:0}
+.playing #rec{opacity:1;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+
+#bar{background:var(--espresso);border-top:1px solid var(--line);padding:10px max(12px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px;transition:transform .3s,opacity .3s}
+.playing.idle #bar{opacity:0;transform:translateY(100%);pointer-events:none}
+.playing.idle #hud{opacity:.35}
+.grp{display:flex;align-items:center;gap:4px;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:3px}
+.b{min-width:38px;height:36px;padding:0 10px;border-radius:7px;font-size:14px;color:var(--bone);display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.b:hover{background:#2a221c}
+.b.on{background:var(--bone);color:var(--espresso)}
+.b.play{background:var(--gold);color:#1a1307;font-weight:700;min-width:96px}
+.val{font-family:var(--f-mono);font-size:12px;color:var(--sand);min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+.lbl{font-size:11px;color:var(--mute);padding:0 4px}
+.sp{flex:1}
+@media (max-width:640px){#bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.grp,.b{flex:none}.sp{display:none}.hide-s{display:none}.b{min-width:34px;padding:0 8px}.b.play{min-width:78px}}
+@media (prefers-reduced-motion:reduce){.ln,#bar,#hud{transition:none}}
+
+/* ---------- camera mode ---------- */
+#cam{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);background:#000}
+.cam #flip{background:linear-gradient(#000e 0%,#000c 34%,#0000 52%)}
+.cam .ln{opacity:.3}.cam .ln.on{opacity:1}
+.cam .ln:not(.on) ~ .ln:not(.on){opacity:.18}
+.cam #fadeB{display:none}
+.b.rec{background:#d9432f;color:#fff;font-weight:700;min-width:96px}
+#camB.on{background:#d9432f;color:#fff}
+#guide916{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);aspect-ratio:9/16;max-width:100%;box-shadow:0 0 0 100vmax #0008;pointer-events:none;border-inline:1px solid #ffffff33}
+#review{position:absolute;inset:0;background:#000e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;z-index:3}
+#review video{max-height:70%;max-width:100%;border-radius:10px;background:#111}
+#review .acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#review .b{background:var(--ink);border:1px solid var(--line);height:44px;padding:0 16px}
+#review .b.pri{background:var(--gold);color:#1a1307;border:0;font-weight:700}
+#review p{margin:0;color:var(--sand);font-size:14px;text-align:center;max-width:46ch;line-height:1.5}
+#camMsg{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;z-index:3;background:#000e}
+#camMsg div{max-width:46ch;line-height:1.7;color:var(--bone);font-size:16px}
+#camMsg b{color:var(--gold)}
+#takes{font-family:var(--f-mono);font-size:12px;color:var(--mute)}
+</style>
+
+<div id="lib">
+  <div class="brand">frame &amp; flow club · יום צילום</div>
+  <h1>הפרומפטר שלך</h1>
+  <p class="sub">כל התסריטים מהמסמך, בסדר מהקל לקשה. בוחרים ריל, מעמידים את המסך ליד העדשה, ולוחצים התחלה. הטקסט שלך בלבן, השורות של הקול המשוכפל בטיל, והערות הבימוי קטנות בצד.</p>
+  <div class="keys">
+    <span><kbd>רווח</kbd>התחלה / עצירה</span>
+    <span><kbd>↑ ↓</kbd>מהירות</span>
+    <span><kbd>← →</kbd>שורה קודמת / הבאה</span>
+    <span><kbd>R</kbd>מההתחלה</span>
+    <span><kbd>M</kbd>מראה</span>
+    <span><kbd>Esc</kbd>חזרה לרשימה</span>
+    <span>שלט Bluetooth עובד כמו חצים</span>
+  </div>
+  <div class="list" id="list"></div>
+  <p class="foot">מה שמסמנים כ"צולם" נשמר בדפדפן הזה בלבד. גם עריכות טקסט נשמרות רק פה, והמסמך לא משתנה.</p>
+</div>
+
+<div id="pr" hidden>
+  <div id="stage">
+    <video id="cam" playsinline muted autoplay hidden></video>
+    <div id="guide916" hidden></div>
+    <div id="flip">
+      <div id="scroll"></div>
+    </div>
+    <div id="band"></div><div id="mark"></div>
+    <div id="fadeT"></div><div id="fadeB"></div>
+    <div id="hud"><span><span id="rec"></span><b id="hTitle"></b></span><span><span id="hTime">0:00</span> / <span id="hLen"></span></span></div>
+    <div id="count" hidden>3</div>
+    <div id="review" hidden>
+      <video id="take" playsinline controls></video>
+      <p id="takeInfo"></p>
+      <div class="acts">
+        <button class="b pri" id="saveTake">⬇ שמירה לגלריה</button>
+        <button class="b" id="retake">● טייק חוזר</button>
+        <button class="b" id="closeTake">חזרה לפרומפטר</button>
+      </div>
+    </div>
+    <div id="camMsg" hidden><div></div></div>
+  </div>
+  <div id="bar">
+    <button class="b" id="back" title="חזרה לרשימה">→ רשימה</button>
+    <button class="b play" id="play">▶ התחלה</button>
+    <button class="b" id="camB" title="צילום עם הפרומפטר">📷 מצלמה</button>
+    <div class="grp"><span class="lbl">מהירות</span><button class="b" id="spD" aria-label="לאט יותר">−</button><span class="val" id="spV"></span><button class="b" id="spU" aria-label="מהר יותר">+</button></div>
+    <div class="grp"><span class="lbl">גודל</span><button class="b" id="fsD" aria-label="טקסט קטן יותר">A−</button><button class="b" id="fsU" aria-label="טקסט גדול יותר">A+</button></div>
+    <div class="grp" id="langG"><button class="b" data-l="he">עב</button><button class="b" data-l="en">EN</button></div>
+    <div class="grp" id="verG"></div>
+    <span class="sp"></span>
+    <div class="grp">
+      <button class="b hide-s" id="restart" title="מההתחלה (R)">↺</button>
+      <button class="b" id="dirB" title="הערות בימוי">הערות</button>
+      <button class="b" id="mirB" title="מראה אופקית לזכוכית פרומפטר (M)">⇋ מראה</button>
+      <button class="b hide-s" id="mirV" title="היפוך אנכי">⇅</button>
+      <button class="b hide-s" id="editB" title="לערוך את הטקסט">עריכה</button>
+      <button class="b" id="doneB" title="סמני שצולם">✓ צולם</button>
+      <button class="b hide-s" id="fullB" title="מסך מלא">⛶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"id":"ריל 10","title":"חודש של תוכן עם Claude","level":"קל","code":"מדריך","len":"45 שנ'","headline":"חודש של תוכן. בלי לבקש רעיונות.","v":[{"name":"ראשי","he":[{"t":"0–5","g":[{"k":"me","t":"ככה מתכננים חודש שלם של תוכן עם Claude. ולא, לא מבקשים מ-Claude 'תן לי רעיונות לפוסטים'. ככה כולם מקבלים בדיוק את אותם רעיונות. קודם מגלים מה באמת עובד אצלכם, ורק אז בונים."}],"s":""},{"t":"5–13","g":[{"k":"me","t":"קודם Claude סורק את הפוסטים שלכם ושל המתחרים. אני סרקתי 16 חשבונות."}],"s":""},{"t":"13–22","g":[{"k":"me","t":"נותנים ל-Claude את עמודי התוכן ואת האסטרטגיה שלכם. אין לכם אסטרטגיה? Claude בונה אותה איתכם."}],"s":""},{"t":"22–30","g":[{"k":"me","t":"הוא עובר על התגובות ומוצא את השאלות שאף אחד לא ענה עליהן."}],"s":""},{"t":"30–34","g":[{"k":"me","t":"ומחדד את עמודי התוכן: מה חסר, ואיפה הפערים."}],"s":""},{"t":"34–41","g":[{"k":"me","t":"ואז מחברים ל-Notion, והוא שולח לשם חודש שלם עם הוקים וקריאה לפעולה. וכי הוא ניתח את הפוסטים שלכם, הוא יודע מה הקהל שלכם אוהב."}],"s":""},{"t":"41–45","g":[{"k":"me","t":"תגיבו 'מדריך' ואשלח לכם את התהליך המלא ואת הפרומפטים."}],"s":""}],"en":[{"t":"0–5","g":[{"k":"me","t":"This is how you plan a full month of content with Claude. And no, you don't ask Claude for post ideas. That's how everyone gets the same ideas. First you find out what actually works for you, then you build."}],"s":""},{"t":"5–13","g":[{"k":"me","t":"First, Claude scans your posts and your competitors'. I scanned 16 accounts."}],"s":""},{"t":"13–22","g":[{"k":"me","t":"You give Claude your content pillars and your strategy. No strategy yet? Claude builds it with you."}],"s":""},{"t":"22–30","g":[{"k":"me","t":"It goes through your comments and finds the questions nobody answered."}],"s":""},{"t":"30–34","g":[{"k":"me","t":"And it sharpens your pillars: what's missing, and where the gaps are."}],"s":""},{"t":"34–41","g":[{"k":"me","t":"Then you connect Notion, and it sends a full month there with hooks and CTAs. And because it analyzed your posts, it knows what your audience loves."}],"s":""},{"t":"41–45","g":[{"k":"me","t":"Comment GUIDE and I'll send you the full workflow and the prompts."}],"s":""}]}]},{"id":"ריל 4","title":"צוות שיווק שלם עם Claude","level":"קל","code":"מדריך","len":"55 שנ'","headline":"צוות שיווק שלם. Claude אחד.","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"ככה מריצים צוות שיווק שלם עם Claude."}],"s":""},{"t":"3–14","g":[{"k":"me","t":"רוב האנשים מבקשים בקלאוד משימה אחת, כיתוב או רעיונות לפוסטים. אבל הדבר הכי חזק ש-Claude יודע לעשות הוא להריץ שרשרת שלמה: מה שמשימה אחת מוציאה, המשימה הבאה מקבלת, והכול רץ לבד."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"שלב 1: נותנים ל-Claude גישה לתיקייה, ושמים בה את הלוגו ואת הנחיות המותג."}],"s":""},{"t":"20–28","g":[{"k":"me","t":"שלב 2: מסבירים ל-Claude את כל השרשרת ומה כל תפקיד עושה: מעצבת, צלמת (אצלנו זה יצירת התמונות), קופירייטרית."}],"s":""},{"t":"28–42","g":[{"k":"me","t":"שלב 3: מריצים, בודקים, משפרים, והופכים ל-Skill: הסדר, מה כל תפקיד מוסר לבא, ואיפה אתם מאשרים."}],"s":""},{"t":"42–48","g":[{"k":"me","t":"שלב 4: מחברים את Claude לכלים שלכם, למשל ליצירת תמונות או ל-Figma."}],"s":""},{"t":"48–53","g":[{"k":"me","t":"שלב 5: קובעים מתי זה מתחיל, למשל כשמשנים סטטוס ב-Notion. ומשם, הכול רץ לבד."}],"s":""},{"t":"53–56","g":[{"k":"me","t":"תגיבו 'מדריך' ואשלח לכם את הפרומפטים המדויקים להעתקה ואת כל התהליך."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"This is how you run a full marketing team with Claude."}],"s":""},{"t":"3–14","g":[{"k":"me","t":"Most people ask Claude for one task, a caption or post ideas. But the most powerful thing Claude can do is run a full pipeline. The output of one task becomes the input for the next, and it all runs on its own."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"Step one: give Claude access to a folder with your logo and your brand guidelines."}],"s":""},{"t":"20–28","g":[{"k":"me","t":"Step two: explain the whole pipeline and what each role does. A designer, a photographer (for us, that's image generation), a copywriter."}],"s":""},{"t":"28–42","g":[{"k":"me","t":"Step three: run it, test it, tweak it, and turn it into a skill: the order, what each role hands over, and where you approve."}],"s":""},{"t":"42–48","g":[{"k":"me","t":"Step four: connect Claude to your tools, like image generation or Figma."}],"s":""},{"t":"48–53","g":[{"k":"me","t":"Step five: set when it starts, like a status change in Notion. From there, it runs on its own."}],"s":""},{"t":"53–56","g":[{"k":"me","t":"Comment GUIDE and I'll send you the exact prompts to copy and the full workflow."}],"s":""}]}]},{"id":"ריל 12","title":"חודש של תוכן, ביום אחד","level":"קל","code":"מדריך","len":"35 שנ'","headline":"חודש של תוכן. יום אחד.","v":[{"name":"ראשי","he":[{"t":"0–5","g":[{"k":"me","t":"מה אם הייתי אומרת לכם שכל התוכן הזה, חודש שלם, נוצר ביום אחד, עם Claude?"},{"k":"dir","t":"מסביבך: גריד של פוסטים"}],"s":""},{"t":"5–10","g":[{"k":"me","t":"במקום לשבת על כל פוסט לבד, נתתי ל-Claude את תיקיית המותג שלי."}],"s":""},{"t":"10–14","g":[{"k":"me","t":"ופשוט כתבתי: תבנה לי את כל התוכן לחודש הבא, בשפה של המותג שלי."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"תוך שעה הוא כתב [30] הוקים, [12] קרוסלות, [8] תסריטים לרילים, וכיתוב לכל פוסט."}],"s":""},{"t":"20–30","g":[{"k":"me","t":"ואז רציתי גם תמונות. כתבתי: תכין פרומפט לכל פוסט. ואז: עכשיו הכול באנגלית. ומיד היה לי גם חודש לעמוד הבינלאומי."}],"s":""},{"t":"30–35","g":[{"k":"me","t":"תשמרו את זה. ותגיבו 'מדריך' ואשלח לכם את כל הפרומפטים."}],"s":""}],"en":[{"t":"0–5","g":[{"k":"me","t":"What if I told you all of this content, a full month, was made in one day, with Claude?"}],"s":""},{"t":"5–10","g":[{"k":"me","t":"Instead of sitting on every post separately, I gave Claude my brand folder."}],"s":""},{"t":"10–14","g":[{"k":"me","t":"And I just wrote: build me all of next month's content, in my brand's voice."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"Within an hour it wrote [30] hooks, [12] carousels, [8] reel scripts, and a caption for every post."}],"s":""},{"t":"20–30","g":[{"k":"me","t":"Then I wanted images too. I wrote: write a prompt for every post. Then: now all of it in Hebrew. And right away I had a month for the second account too."}],"s":""},{"t":"30–35","g":[{"k":"me","t":"Save this. And comment GUIDE for every prompt."}],"s":""}]}]},{"id":"ריל 11","title":"ה-Skill שמייצר מודעות","level":"קל","code":"מדריך","len":"33 שנ'","headline":"ה-Skill הזה מייצר מודעות כמו אלה","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"ה-Skill הזה של Claude מייצר מודעות כמו אלה למוצר שלכם."},{"k":"dir","t":"על המסך: המודעות שלך"}],"s":""},{"t":"3–7","g":[{"k":"me","t":"קודם מתקינים את ה-Skill ב-Claude, ומחברים את Higgsfield."}],"s":""},{"t":"7–11","g":[{"k":"me","t":"נותנים לו את תיקיית המותג, כדי ש-Claude יכיר את המוצר שלכם, ולא גרסה כללית שלו."}],"s":""},{"t":"11–15","g":[{"k":"me","t":"עכשיו מבקשים עשרה קונספטים, כל אחד מזווית אחרת לגמרי."}],"s":""},{"t":"15–20","g":[{"k":"me","t":"ואז Claude בונה דמות למותג, שחקנית שנראית אמיתית, בלי שכתבתם פרומפט אחד."}],"s":""},{"t":"20–25","g":[{"k":"me","t":"הוא מרכיב איתה שלוש מודעות מלאות, בתוך Claude, ומשם הן עולות ישר לחשבון המודעות."}],"s":""},{"t":"25–29","g":[{"k":"me","t":"והכי מגניב: בסבב הבא, Claude קורא את התוצאות, ומייצר רק עוד ממה שכבר מוכר."}],"s":""},{"t":"29–33","g":[{"k":"me","t":"פירקתי את כל התהליך שלב אחרי שלב. תגיבו 'מדריך' ואשלח לכם."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"This Claude skill creates ads like these for your product."}],"s":""},{"t":"3–7","g":[{"k":"me","t":"First, install the skill in Claude and connect Higgsfield."}],"s":""},{"t":"7–11","g":[{"k":"me","t":"Give it the folder with your brand info, so Claude actually knows your product."}],"s":""},{"t":"11–15","g":[{"k":"me","t":"Ask it for 10 ad concepts with completely different angles."}],"s":""},{"t":"15–20","g":[{"k":"me","t":"Claude generates your AI model next, a real-looking actor for your brand, without you writing a single prompt."}],"s":""},{"t":"20–25","g":[{"k":"me","t":"Then it builds the full ads with that model, right inside Claude, and you push them to your ad account."}],"s":""},{"t":"25–29","g":[{"k":"me","t":"The best part: next time, Claude reads your ad results and only makes more of what worked."}],"s":""},{"t":"29–33","g":[{"k":"me","t":"I broke down the whole workflow step by step. Comment GUIDE and I'll send it."}],"s":""}]}]},{"id":"ריל 1","title":"שיחה עם הקול שלי","level":"בינוני","code":"מדריך","len":"23 שנ'","headline":"שיחה עם הקול שלי","v":[{"name":"ראשי","he":[{"t":"0–2","g":[{"k":"me","t":"יש לי סוד שחוסך לי שעתיים בכל ריל—"},{"k":"clone","t":"רגע. את הסוד הזה אני אגיד."}],"s":"הקול הזה הוא לא אני"},{"t":"2–5","g":[{"k":"me","t":"...מי זאת?"},{"k":"clone","t":"את. הקול האמיתי שלך, משוכפל ב-AI. רק בלי הטייקים."}],"s":"הקול שלי, משוכפל ב-AI"},{"t":"5–9","g":[{"k":"me","t":"תוכיחי."},{"k":"tag","t":"[לוחשת]"},{"k":"clone","t":"דקה אחת של הקול שלך. זה כל מה שהייתי צריכה."}],"s":"01 · דקה אחת"},{"t":"9–13","g":[{"k":"me","t":"ואת יודעת לצחוק?"},{"k":"tag","t":"[צוחקת]"},{"k":"clone","t":"רק כשכותבים לי את זה בסוגריים."}],"s":"02 · רגש בסוגריים"},{"t":"13–16","g":[{"k":"me","t":"ובאנגלית?"},{"k":"clone","t":"Of course. Even better than you."}],"s":""},{"t":"16–20","g":[{"k":"me","t":"ואם טעיתי במילה?"},{"k":"clone","t":"מתקנים בטקסט. לא מקליטים שוב."}],"s":"03 · מתקנים בטקסט"},{"t":"20–25","g":[{"k":"me","t":"טוב. מה אני אומרת להם?"},{"k":"clone","t":"שיגיבו 'מדריך', ואשלח להם איך משכפלים את הקול שלהם."},{"k":"me","t":"...תגיבו 'מדריך' כדי ללמוד איך."}],"s":"תגיבו מדריך"},{"t":"25–28","g":[{"k":"tag","t":"[צוחקת]"},{"k":"clone","t":"ותודה שנתת לי להנחות."}],"s":""}],"en":[{"t":"0–2","g":[{"k":"me","t":"I have a secret that saves me two hours on every reel—"},{"k":"clone","t":"Wait. I'll tell this one."}],"s":"This voice isn't me"},{"t":"2–5","g":[{"k":"me","t":"...who are you?"},{"k":"clone","t":"You. Your real voice, cloned with AI. Just without the retakes."}],"s":"My voice, cloned with AI"},{"t":"5–9","g":[{"k":"me","t":"Prove it."},{"k":"tag","t":"[whispering]"},{"k":"clone","t":"One minute of your voice. That's all I needed."}],"s":"01 · one minute"},{"t":"9–13","g":[{"k":"me","t":"Can you laugh?"},{"k":"tag","t":"[laughing]"},{"k":"clone","t":"Only when you write it in brackets."}],"s":"02 · emotion in brackets"},{"t":"13–16","g":[{"k":"me","t":"And in Hebrew?"},{"k":"clone","t":"בטח. אפילו יותר טוב ממך."}],"s":""},{"t":"16–20","g":[{"k":"me","t":"And if I got a word wrong?"},{"k":"clone","t":"Fix it in the text. No re-recording."}],"s":"03 · fix it in the text"},{"t":"20–25","g":[{"k":"me","t":"Fine. What do I tell them?"},{"k":"clone","t":"Tell them to comment GUIDE, and I'll send them how to clone their own voice."},{"k":"me","t":"...comment GUIDE to learn how."}],"s":"Comment GUIDE"},{"t":"25–28","g":[{"k":"tag","t":"[laughing]"},{"k":"clone","t":"And thanks for letting me host."}],"s":""}]},{"name":"אמיתי או משוכפל?","he":[{"t":"0–3","g":[{"k":"me","t":"שלושה משפטים. אחד מהם אני, ושניים הקול המשוכפל שלי. תנחשו בתגובות: 1, 2 או 3."}],"s":"אמיתי או משוכפל?"},{"t":"3–7","g":[{"k":"me","t":"היי, אני מקליטה את זה עכשיו מהסלון."}],"s":"1"},{"t":"7–11","g":[{"k":"tag","t":"[לוחשת]"},{"k":"me","t":"זה סוד, אבל אני בכלל לא פה."}],"s":"2"},{"t":"11–15","g":[{"k":"tag","t":"[צוחקת]"},{"k":"me","t":"And I can do this in English too."}],"s":"3"},{"t":"15–20","g":[{"k":"me","t":"אז ככה: אף אחד מהם לא היה אני. כל השלושה משוכפלים."}],"s":"0 שניות הקלטה"},{"t":"20–25","g":[{"k":"me","t":"דקה של הקלטה, רגש בסוגריים, ותיקון בטקסט. זה כל הסוד. תגיבו 'מדריך' ואשלח לכם איך."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"Three sentences. One of them is me, two are my cloned voice. Guess in the comments: 1, 2 or 3."}],"s":""},{"t":"3–7","g":[{"k":"me","t":"Hi, I'm recording this right now from my living room."}],"s":""},{"t":"7–11","g":[{"k":"tag","t":"[whispering]"},{"k":"me","t":"It's a secret, but I'm not even here."}],"s":""},{"t":"11–15","g":[{"k":"tag","t":"[laughing]"},{"k":"me","t":"ואני יודעת גם עברית."}],"s":""},{"t":"15–20","g":[{"k":"me","t":"Here's the thing: none of them was me. All three are cloned."}],"s":""},{"t":"20–25","g":[{"k":"me","t":"One minute of recording, emotion in brackets, and fixes in the text. That's the whole secret. Comment GUIDE and I'll send you how."}],"s":""}]}]},{"id":"ריל 1ב","title":"לא הקלטתי מילה","level":"בינוני","code":"מדריך","len":"53 שנ'","headline":"לא הקלטתי מילה","v":[{"name":"ראשי","he":[{"t":"0–2","g":[{"k":"me","t":"לא הקלטתי מילה אחת מהסרטון הזה. ElevenLabs הקליט."}],"s":""},{"t":"2–7","g":[{"k":"me","t":"בלי מיקרופון, בלי אולפן, בלי טייקים. דקה אחת מהקול שלי, וכל הקריינות מוכנה."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"תקשיבו. אני כותבת 'לוחשת'..."},{"k":"tag","t":"[לוחשת]"},{"k":"me","t":"זה סוד."}],"s":""},{"t":"14–22","g":[{"k":"me","t":"ואני לא קריינית. הקלטתי דקה אחת, פעם אחת, ומאז אני רק כותבת טקסט."}],"s":""},{"t":"22–26","g":[{"k":"me","t":"אני כותבת 'צוחקת'..."},{"k":"tag","t":"[צוחקת]"}],"s":""},{"t":"26–39","g":[{"k":"me","t":"והרבה אנשים משכפלים קול עכשיו. אבל אצלי זה קצת אחרת: אני אף פעם לא מקליטה מחדש. טעות בטקסט? מתקנת מילה, והקול מתוקן."}],"s":""},{"t":"39–43","g":[{"k":"me","t":"בלי להקליט שוב. רק עוד משפט."}],"s":""},{"t":"43–50","g":[{"k":"me","t":"הכנתי מדריך שמראה בדיוק איך. תגיבו 'מדריך' ואשלח לכם. ותעקבו לעוד טריקים כאלה."}],"s":""},{"t":"50–53","g":[{"k":"dir","t":"את מורידה את המיקרופון, הפה סגור:"},{"k":"me","t":"ואם לא שמתם לב, גם המשפט הזה לא היה אני."}],"s":""}],"en":[{"t":"0–2","g":[{"k":"me","t":"I didn't record a single word of this video. ElevenLabs did."}],"s":""},{"t":"2–7","g":[{"k":"me","t":"No mic, no studio, no retakes. One minute of my voice, and the whole voiceover is done."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"Listen. I type 'whispers'..."},{"k":"tag","t":"[whispers]"},{"k":"me","t":"It's a secret."}],"s":""},{"t":"14–22","g":[{"k":"me","t":"And I'm not a voice actor. I recorded one minute, once, and since then I just type."}],"s":""},{"t":"22–26","g":[{"k":"me","t":"I type 'laughs'..."},{"k":"tag","t":"[laughs]"}],"s":""},{"t":"26–39","g":[{"k":"me","t":"Lots of people clone their voice now. But mine's a little different: I never re-record. Typo in the script? Fix one word, and the voice is fixed."}],"s":""},{"t":"39–43","g":[{"k":"me","t":"No retakes. Just one more sentence."}],"s":""},{"t":"43–50","g":[{"k":"me","t":"I made a guide that shows exactly how. Comment GUIDE and I'll send it. And follow for more tricks like this."}],"s":""},{"t":"50–53","g":[{"k":"dir","t":"You lower the mic, mouth closed:"},{"k":"me","t":"And in case you didn't notice, that wasn't me either."}],"s":""}]}]},{"id":"ריל 7","title":"כלי אחד, כל הגרסאות","level":"בינוני","code":"AI","len":"35 שנ'","headline":"רמה חדשה של עריכה (כלי אחד משנה הכול)","v":[{"name":"ראשי","he":[{"t":"0–5","g":[{"k":"me","t":"מה אם הייתי אומרת לכם שאפשר ליצור את כל הסרטונים האלה בפחות משעה, עם כלי אחד בלבד?"},{"k":"dir","t":"מסביבך: רשת של הרילים שלך"}],"s":""},{"t":"5–10","g":[{"k":"me","t":"במקום לגרור קליפים שעות, נתתי ל-Claude את הצילום הגולמי"}],"s":""},{"t":"10–14","g":[{"k":"me","t":"ופשוט כתבתי: תהפוך את זה לריל לאינסטגרם, בשפה של המותג שלי."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"תוך כמה דקות הוא הוריד את השתיקות, בחר את הטייקים הכי טובים, הוסיף כתוביות בפונטים שלי, וסנכרן למוזיקה."}],"s":""},{"t":"20–30","g":[{"k":"me","t":"ואז רציתי גרסה קצרה לסטורי. כתבתי: תעשה את זה 15 שניות. ואז: עכשיו באנגלית. ומיד יצאו עוד שתי גרסאות."}],"s":""},{"t":"30–35","g":[{"k":"me","t":"תשמרו את זה. ותגיבו 'AI' ואשלח לכם את הפרומפטים."}],"s":""}],"en":[{"t":"0–5","g":[{"k":"me","t":"What if I told you that you can make all these videos in under an hour, with just one tool?"}],"s":""},{"t":"5–10","g":[{"k":"me","t":"Instead of dragging clips around for hours, I gave Claude my raw footage"}],"s":""},{"t":"10–14","g":[{"k":"me","t":"and simply typed: turn this into an Instagram reel, in my brand's look."}],"s":""},{"t":"14–20","g":[{"k":"me","t":"In a few minutes it cut the pauses, picked the best takes, added captions in my fonts, and synced it to music."}],"s":""},{"t":"20–30","g":[{"k":"me","t":"Then I wanted a short one for stories. I typed: make it 15 seconds. Then: now in Hebrew. Two more versions, right away."}],"s":""},{"t":"30–35","g":[{"k":"me","t":"Save this. And comment AI for the prompts."}],"s":""}]}]},{"id":"ריל 6","title":"מלוח השראה לקמפיין","level":"בינוני","code":"מדריך","len":"28 שנ'","headline":"המוצר","v":[{"name":"ראשי","he":[{"t":"0–1","g":[{"k":"me","t":"המוצר."},{"k":"dir","t":"התיק הצהוב על המסך"}],"s":""},{"t":"1–4","g":[{"k":"me","t":"לוח ההשראה."},{"k":"dir","t":"סלעים לבנים, ים, שיפון לילך"}],"s":""},{"t":"4–7","g":[{"k":"me","t":"הצבעים של המותג."},{"k":"dir","t":"Bone, Sand, Teal, Espresso"}],"s":""},{"t":"7–10","g":[{"k":"me","t":"כיוון האור."},{"k":"dir","t":"חץ אור על תמונת רפרנס"}],"s":""},{"t":"(חדש)","g":[{"k":"me","t":"הבריף ל-Claude."},{"k":"dir","t":"שלוש שורות נכתבות"}],"s":""},{"t":"10–22","g":[{"k":"me","t":"והקמפיין."},{"k":"dir","t":"הקמפיין במילוס, תמונה אחרי תמונה"}],"s":""},{"t":"22–26","g":[{"k":"me","t":"תודה שצפיתם."}],"s":""}],"en":[{"t":"0–1","g":[{"k":"me","t":"The product."}],"s":""},{"t":"1–4","g":[{"k":"me","t":"The moodboard."}],"s":""},{"t":"4–7","g":[{"k":"me","t":"The brand colors."}],"s":""},{"t":"7–10","g":[{"k":"me","t":"The light direction."}],"s":""},{"t":"(new)","g":[{"k":"me","t":"The brief to Claude."}],"s":""},{"t":"10–22","g":[{"k":"me","t":"And the campaign."}],"s":""},{"t":"22–26","g":[{"k":"me","t":"Thanks for watching."}],"s":""}]}]},{"id":"ריל 2","title":"לא ערכתי שנייה אחת","level":"בינוני-קשה","code":"מדריך","len":"53 שנ'","headline":"לא ערכתי שנייה אחת. Claude ערך.","v":[{"name":"ראשי","he":[{"t":"0–2","g":[{"k":"me","t":"לא ערכתי שנייה אחת מהסרטון הזה. Claude ערך."}],"s":""},{"t":"2–7","g":[{"k":"me","t":"בלי קאפקאט, בלי אפליקציית עריכה, כלום. משפט אחד, וכל הסרטון ערוך."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"תראו. אני אומרת ל-Claude: תעשה את זה בצבעים של המותג שלי. והכול עובר לבז' וטיל, תמונות הקמפיין שלי מרחפות פנימה, והכותרות עוברות לסריף."}],"s":""},{"t":"14–22","g":[{"k":"me","t":"ואני לא עורכת. אני רק זורקת את הצילום הגולמי, עם הטייקים הגרועים, ואחרי כמה דקות מקבלים בדיוק את מה שאתם רואים עכשיו."}],"s":""},{"t":"22–26","g":[{"k":"me","t":"אז אני יכולה להגיד: תעשה את זה מינימליסטי. והרקע מתנקה, ונשארת מילה אחת על המסך."}],"s":""},{"t":"26–39","g":[{"k":"me","t":"והרבה אנשים עושים את זה עכשיו. אבל אצלי זה קצת אחרת, כי לפני שהוא מרנדר, הוא נותן לי סטוריבורד מלא. ככה אני רואה מה Claude חושב לפני שהוא יוצר משהו. ואם אני רוצה לשנות, אני פשוט מתארת מה אני רוצה לראות."}],"s":""},{"t":"39–43","g":[{"k":"me","t":"אני אף פעם לא פותחת אפליקציית עריכה. רוצה שזה יזוז מהר יותר? תקצר את החיתוכים."},{"k":"dir","t":"והקצב עולה מולנו"},{"k":"me","t":"רוצה כתוביות אחרות? תעביר לסריף."},{"k":"dir","t":"והכתוביות מתחלפות מולנו"},{"k":"me","t":"כל שינוי זה רק עוד משפט."}],"s":""},{"t":"43–53","g":[{"k":"me","t":"כתבתי לכם מדריך שמראה בדיוק איך אני עושה את זה. תגיבו 'מדריך' ואשלח לכם. ותעקבו לעוד טיפים כאלה על AI."}],"s":""}],"en":[{"t":"0–2","g":[{"k":"me","t":"I didn't edit a single second of this video. Claude did."}],"s":""},{"t":"2–7","g":[{"k":"me","t":"No CapCut, no editing app, nothing. One sentence and the whole video is edited."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"Watch. I tell Claude, make it in my brand colors. Everything shifts to sand and teal, my campaign shots float in, and the titles turn serif."}],"s":""},{"t":"14–22","g":[{"k":"me","t":"And I don't edit. I just drop in the raw footage with the bad takes still in it, and a few minutes later, you get exactly what you're seeing now."}],"s":""},{"t":"22–26","g":[{"k":"me","t":"So I can say, make it minimal. The background clears, and one word stays on screen."}],"s":""},{"t":"26–39","g":[{"k":"me","t":"Lots of people are doing this right now. But mine's a little different, because before it renders, it gives me a full storyboard. So I see what Claude is thinking before it makes anything. And if I want a change, I just describe what I want to see."}],"s":""},{"t":"39–43","g":[{"k":"me","t":"I never open an editing app. Want it faster? Tighten the cuts."},{"k":"dir","t":"the pace picks up"},{"k":"me","t":"Want different captions? Make them serif."},{"k":"dir","t":"the captions change"},{"k":"me","t":"Every change is just one more sentence."}],"s":""},{"t":"43–53","g":[{"k":"me","t":"I wrote a guide that walks you through exactly how I do this. Comment GUIDE and I'll send it over. And follow for more AI tips like this."}],"s":""}]}]},{"id":"ריל 13","title":"סלפי עם סלבס, ב-AI","level":"בינוני-קשה","code":"AI","len":"22 שנ'","headline":"הטרנד שכולם עושים עכשיו","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"תראו את הטרנד שכולם עושים עכשיו: סלפי עם סלבס. אף אחת מהן לא צולמה."}],"s":"הסלפים מתחלפים מהר"},{"t":"3–8","g":[{"k":"me","t":"תמונה אחת שלכם, פרומפט אחד ב-Nano Banana, וזה מה שיוצא."}],"s":"תמונת מקור ← תוצאה"},{"t":"8–13","g":[{"k":"me","t":"מעלים את התמונה שלכם ואת התמונה של הסלב, מדביקים פרומפט אחד, וזהו."}],"s":"הקלטת מסך"},{"t":"13–18","g":[{"k":"me","t":"רוצים שזה יזוז? מעלים שתי תמונות, ומקבלים סרטון שעובר מסלב לסלב."}],"s":"הסרטון המוכן"},{"t":"18–22","g":[{"k":"me","t":"רוצים את הפרומפט ואת כל התהליך? תגיבו 'AI' ואשלח לכם. ותעקבו, כדי שההודעה תגיע."}],"s":"מילת הקוד בגדול"}],"en":[{"t":"0–3","g":[{"k":"me","t":"Look at the trend everyone's doing right now: selfies with celebrities. Not one of them was shot."}],"s":""},{"t":"3–8","g":[{"k":"me","t":"One photo of you, one prompt in Nano Banana, and this is what comes out."}],"s":""},{"t":"8–13","g":[{"k":"me","t":"Upload your photo and the celebrity's photo, paste one prompt, and that's it."}],"s":""},{"t":"13–18","g":[{"k":"me","t":"Want it to move? Upload two images, and you get a video that goes from one celebrity to the next."}],"s":""},{"t":"18–22","g":[{"k":"me","t":"Want the prompt and the full process? Comment AI and I'll send it. And follow, so the message reaches you."}],"s":""}]}]},{"id":"ריל 9","title":"מי עורך טוב יותר?","level":"קשה","code":"מדריך","len":"56 שנ'","headline":"Claude או GPT: מי עורך טוב יותר?","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"אז מי עורך טוב יותר? קלוד או GPT?"}],"s":""},{"t":"3–7","g":[{"k":"me","t":"בואו נבדוק. נתתי להם את אותו פרומפט ואותם סקילים, ואני פשוט מדברת."}],"s":""},{"t":"7–19","g":[{"k":"me","t":"ביד הזאת התיק הצהוב, וביד הזאת בקבוק המים, מרחפים ועוקבים אחרי היד שלי. ומאחוריי באנימציה: frame & flow."}],"s":""},{"t":"19–24","g":[{"k":"me","t":"עכשיו תפרק את הסצנה לשכבות, שנראה מה יש בפריים. ועכשיו תאחד."}],"s":""},{"t":"24–29","g":[{"k":"me","t":"תשים אותי בעיגול מימין, ומשמאל את הז'קט הכחול, מסתובב."}],"s":""},{"t":"29–39","g":[{"k":"me","t":"עכשיו תפרק את הלוק: ז'קט, תיק, עגילים, עם תווית בעברית לכל אחד. ועכשיו תרכיב בחזרה."}],"s":""},{"t":"39–46","g":[{"k":"me","t":"תחזיר אותי באנימציה חלקה, ותשים סביבי את תמונות הקמפיין שלי, מרחפות ומסתובבות."}],"s":""},{"t":"46–56","g":[{"k":"me","t":"עכשיו מושן גרפיקס שאומר: רוצים מדריך לעריכת סרטונים כאלה? תגיבו 'מדריך' ואשלח לכם בפרטי."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"So who edits better? Claude or GPT?"}],"s":""},{"t":"3–7","g":[{"k":"me","t":"Let's test it. Same prompt, same skills, and I'm just going to talk."}],"s":""},{"t":"7–19","g":[{"k":"me","t":"In this hand, the yellow tote. In this one, the water bottle. They float and follow my hand. And behind me, animated: frame & flow."}],"s":""},{"t":"19–24","g":[{"k":"me","t":"Now break the scene into layers so we can see what's in the frame. Now merge them back."}],"s":""},{"t":"24–29","g":[{"k":"me","t":"Put me in a circle on the right, and on the left the blue jacket, spinning."}],"s":""},{"t":"29–39","g":[{"k":"me","t":"Now break down the look: jacket, bag, earrings, with a label on each. Now put it back together."}],"s":""},{"t":"39–46","g":[{"k":"me","t":"Bring me back with a smooth animation, and float my campaign shots around me."}],"s":""},{"t":"46–56","g":[{"k":"me","t":"Now a motion graphic that says: want a guide to editing videos like this? Comment GUIDE and I'll DM it to you."}],"s":""}]}]},{"id":"ריל 3","title":"זה נותן לך את זה","level":"קשה","code":"AI","len":"14 שנ'","headline":"+ /lifestyle (כמו במקור, ליד הפנים)","v":[{"name":"ראשי","he":[{"t":"0–2","g":[{"k":"me","t":"זה נותן לך את זה."},{"k":"dir","t":"+ /lifestyle והקוקטייל על שולחן אבן ליד חלון, יד מרימה אותו"}],"s":""},{"t":"2–4","g":[{"k":"me","t":"זה נותן לך את זה."},{"k":"dir","t":"+ /splash והקוקטייל מתיז, קרח וטיפות קפואים באוויר"}],"s":""},{"t":"4–7","g":[{"k":"me","t":"וזה נותן לך את זה."},{"k":"dir","t":"+ /ingredients והדרים, קרח ורוזמרין מתפרצים סביב הכוס"}],"s":""},{"t":"7–11","g":[{"k":"me","t":"ויש עוד המון פקודות כאלה, שהופכות את יצירת התוכן להרבה יותר קלה."},{"k":"dir","t":"ומסביבך מרחפות שש: /minimal, /cinematic, /flatlay, /goldenhour, /editorial, /macro"}],"s":""},{"t":"11–14","g":[{"k":"me","t":"תגיבו 'AI' ואשלח לכם את כולן."}],"s":""}],"en":[{"t":"0–2","g":[{"k":"me","t":"This gives you this."},{"k":"dir","t":"+ /lifestyle"}],"s":""},{"t":"2–4","g":[{"k":"me","t":"This gives you this."},{"k":"dir","t":"+ /splash"}],"s":""},{"t":"4–7","g":[{"k":"me","t":"And this gives you this."},{"k":"dir","t":"+ /ingredients"}],"s":""},{"t":"7–11","g":[{"k":"me","t":"And there are so many more commands like this that make content creation so much easier."},{"k":"dir","t":"Floating: /minimal, /cinematic, /flatlay, /goldenhour, /editorial, /macro"}],"s":""},{"t":"11–14","g":[{"k":"me","t":"Comment AI and I'll send you all of them."}],"s":""}]}]},{"id":"ריל 5","title":"גרוע, טוב, מצוין","level":"קשה","code":"AI","len":"44 שנ'","headline":"גרוע. טוב. מצוין.","v":[{"name":"ראשי","he":[{"t":"0–5","g":[{"k":"me","t":"שתיהן AI. רק אחת מהן טובה. בואו נשחק: גרוע, טוב, מצוין."},{"k":"dir","t":"את יושבת עם מיקרופון קטן, והתמונות מעלייך"}],"s":""},{"t":"5–13","g":[{"k":"me","t":"סבב ראשון, לבוש. גרוע: ה-AI בחר בשבילה טישירט לבנה וג'ינס. טוב: ביקשתי שיפון אוברסייז. מצוין: שיפון לילך, תיק צהוב ועגילי זהב. אפשר לנחש את המותג."}],"s":""},{"t":"13–22","g":[{"k":"me","t":"סבב שני, סצנה. גרוע: שקיעה כללית, צועק AI. טוב: חוף אמיתי. מצוין: הסלעים הלבנים של מילוס בצהריים, והיא באמצע תנועה."}],"s":""},{"t":"22–29","g":[{"k":"me","t":"סבב שלישי, צבעים. גרוע: הכול בז', והתיק נעלם. טוב: שלושה צבעים. מצוין: לילך, צהוב ולבן, ואותם שלושה בכל תמונה בקמפיין."}],"s":""},{"t":"29–37","g":[{"k":"me","t":"סבב רביעי, חלל. גרוע: הכול סימטרי, והיא בדיוק באמצע. טוב: שום דבר לא חוזר על עצמו. מצוין: עומק, שכבות, ומקום שאפשר לצלם בו קמפיין שלם."}],"s":""},{"t":"37–44","g":[{"k":"me","t":"מותגים מחפשים AI שלא נראה כמו AI. תגיבו 'AI' ואשלח לכם את הצ'קליסט והפרומפטים."}],"s":""}],"en":[{"t":"0–5","g":[{"k":"me","t":"Both of these are AI. Only one is good. Let's play: bad, good, great."}],"s":""},{"t":"5–13","g":[{"k":"me","t":"Round one, outfit. Bad: AI picked a white tee and jeans for her. Good: I asked for oversized chiffon. Great: lilac chiffon, a yellow tote and gold earrings. You can guess the brand."}],"s":""},{"t":"13–22","g":[{"k":"me","t":"Round two, scene. Bad: a generic sunset, screams AI. Good: a real beach. Great: the white rocks of Milos at noon, and she's mid-movement."}],"s":""},{"t":"22–29","g":[{"k":"me","t":"Round three, color. Bad: everything beige, the bag disappears. Good: three colors. Great: lilac, yellow and white, the same three in every shot of the campaign."}],"s":""},{"t":"29–37","g":[{"k":"me","t":"Round four, space. Bad: everything symmetrical, she's dead center. Good: nothing repeats. Great: depth, layers, and a place you could shoot a whole campaign in."}],"s":""},{"t":"37–44","g":[{"k":"me","t":"Brands want AI that doesn't look like AI. Comment AI and I'll send you the checklist and the prompts."}],"s":""}]},{"name":"איזו אמיתית?","he":[{"t":"0–3","g":[{"k":"me","t":"אחת מהתמונות האלה צולמה. השנייה AI. תכתבו בתגובות: 1 או 2."}],"s":""},{"t":"3–9","g":[{"k":"me","t":"סבב ראשון: התיק. תסתכלו על התפר ועל העור."}],"s":""},{"t":"9–16","g":[{"k":"me","t":"סבב שני: הדוגמנית. תסתכלו על העור ועל הידיים."}],"s":""},{"t":"16–23","g":[{"k":"me","t":"סבב שלישי: הלוקיישן. תסתכלו על הצל ועל המים."}],"s":""},{"t":"23–28","g":[{"k":"me","t":"אז ככה: כולן AI. כל השש. אף אחת לא צולמה."}],"s":""},{"t":"28–33","g":[{"k":"me","t":"ומה שבדקתם, תפר, עור, ידיים וצל, זה בדיוק מה שכתבתי בפרומפט. תגיבו 'AI' ואשלח לכם אותו."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"One of these was shot. The other is AI. Comment 1 or 2."}],"s":""},{"t":"3–9","g":[{"k":"me","t":"Round one: the bag. Look at the stitching and the leather."}],"s":""},{"t":"9–16","g":[{"k":"me","t":"Round two: the model. Look at the skin and the hands."}],"s":""},{"t":"16–23","g":[{"k":"me","t":"Round three: the location. Look at the shadow and the water."}],"s":""},{"t":"23–28","g":[{"k":"me","t":"Here's the thing: they're all AI. All six. None of them was shot."}],"s":""},{"t":"28–33","g":[{"k":"me","t":"And what you checked, stitching, skin, hands and shadow, is exactly what I wrote in the prompt. Comment AI and I'll send it to you."}],"s":""}]}]},{"id":"ריל 8","title":"30 שוטים שכל מותג צריך להכיר","level":"הכי קשה","code":"AI","len":"28 שנ'","headline":"30 שוטים שכל מותג צריך להכיר","v":[{"name":"ראשי","he":[{"t":"0–24","g":[{"k":"me","t":"רחב, מדיום, קלוז־אפ, מאקרו, פרופיל, שלושת־רבעי, מאחור, מעבר לכתף, נקודת מבט, גובה עיניים, זווית נמוכה, זווית גבוהה, זווית הולנדית, מלמעלה, אווירי, מגובה הקרקע, עין תולעת, עין דג, קלוז־אפ רחב, קלוז־אפ מלמעלה, קלוז־אפ מלמטה, סלפי, צללית, חסימה בקדמת הפריים, פוקוס קדמי, פוקוס אחורי, השתקפות במנסרה, הבזק עדשה, דרך מראה, ומתוך התיק."}],"s":""},{"t":"24–28","g":[{"k":"me","t":"תגיבו 'AI' ואשלח לכם את כל השוטים והפרומפטים."}],"s":""}],"en":[{"t":"0–24","g":[{"k":"me","t":"Wide, medium, close-up, macro, profile, three-quarter, rear, over the shoulder, POV, eye-level, low angle, high angle, Dutch angle, overhead, aerial, ground level, worm's-eye view, fisheye, wide-angle close-up, high-angle close-up, low-angle close-up, selfie, silhouette, foreground occlusion, foreground focus, background focus, prism reflection, lens flare, through a mirror, and inside the bag shot."}],"s":""},{"t":"24–28","g":[{"k":"me","t":"Comment AI and I'll send you every shot and every prompt."}],"s":""}]}]},{"id":"ריל 14","title":"שלושה שינויים","level":"בינוני","code":"AI","len":"30 שנ'","headline":"צועק AI ← קמפיין","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"התמונה הזאת צועקת AI. שלושה שינויים, והיא קמפיין."},{"k":"dir","t":"תמונה 01, הגנרית"}],"s":""},{"t":"3–10","g":[{"k":"me","t":"שינוי ראשון: ה-AI בחר את הבגדים. אני בחרתי: שמלת שיפון לילך, אוברסייז."},{"k":"dir","t":"תמונה 02"}],"s":""},{"t":"10–17","g":[{"k":"me","t":"שינוי שני: אור אחד, מהצד. לא אור מכל הכיוונים."},{"k":"dir","t":"תמונה 03"}],"s":""},{"t":"17–24","g":[{"k":"me","t":"שינוי שלישי: שלושה צבעים שבחרתי בכוונה. הצבעים של המותג."},{"k":"dir","t":"תמונה 04, מילוס"}],"s":""},{"t":"24–30","g":[{"k":"me","t":"תמונה טובה היא לא פרומפט. היא מותג. תגיבו 'AI' ואשלח לכם את שלושת הפרומפטים."},{"k":"dir","t":"לפני ואחרי, זה לצד זה"}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"This image screams AI. Three changes, and it's a campaign."}],"s":""},{"t":"3–10","g":[{"k":"me","t":"Change one: AI picked the outfit. I picked it: lilac chiffon, oversized."}],"s":""},{"t":"10–17","g":[{"k":"me","t":"Change two: one light, from the side. Not light from everywhere."}],"s":""},{"t":"17–24","g":[{"k":"me","t":"Change three: three colors I chose on purpose. The brand's colors."}],"s":""},{"t":"24–30","g":[{"k":"me","t":"A great image isn't a prompt. It's a brand. Comment AI and I'll send you all three prompts."}],"s":""}]}]},{"id":"ריל 15","title":"אם התמונות שלכם נראות כמו AI","level":"בינוני","code":"AI","len":"30 שנ'","headline":"נראה כמו AI? 3 סיבות","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"me","t":"אם התמונות שלכם נראות כמו AI, זה בגלל שלושה דברים."},{"k":"dir","t":"01: טישירט גנרית, אור שטוח"}],"s":""},{"t":"3–11","g":[{"k":"me","t":"אחד: נתתם ל-AI לבחור את הבגדים. הוא תמיד יבחר טישירט לבנה."},{"k":"dir","t":"02: אותה דוגמנית עם הז'קט"}],"s":""},{"t":"11–19","g":[{"k":"me","t":"שתיים: אור מכל הכיוונים. בצילום אמיתי יש מקור אור אחד."},{"k":"dir","t":"03: ז'קט ואור צד אחד"}],"s":""},{"t":"19–26","g":[{"k":"me","t":"שלוש: צבעים שלא בחרתם. תבחרו שלושה, ותחזרו עליהם בכל תמונה."},{"k":"dir","t":"04: 05-shot1, קיימת"}],"s":""},{"t":"26–30","g":[{"k":"me","t":"תמונה טובה היא לא פרומפט. היא מותג. תגיבו 'AI' ואשלח לכם את הפרומפטים."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"me","t":"If your images look like AI, it's because of three things."}],"s":""},{"t":"3–11","g":[{"k":"me","t":"One: you let AI pick the clothes. It'll always pick a white tee."}],"s":""},{"t":"11–19","g":[{"k":"me","t":"Two: light from everywhere. A real shoot has one light source."}],"s":""},{"t":"19–26","g":[{"k":"me","t":"Three: colors you didn't choose. Pick three, and repeat them in every shot."}],"s":""},{"t":"26–30","g":[{"k":"me","t":"A great image isn't a prompt. It's a brand. Comment AI for the prompts."}],"s":""}]}]},{"id":"ב-4","title":"איך יוצרים את זה","level":"קל","code":"מדריך","len":"60 שנ'","headline":"איך יוצרים את זה","v":[{"name":"ראשי","he":[{"t":"0–3","g":[{"k":"dir","t":"על המסך: \"איך יוצרים את זה\", על הקמפיין שלך בלונדון"}],"s":""},{"t":"3–7","g":[{"k":"me","t":"קודם אני פותחת את Claude, עם ה-Skill שבניתי לקמפיינים."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"אני מבקשת ממנו פרומפט לתמונה: תיק ענק ברחוב בלונדון, ושוער שדוחף אותו על עגלה."}],"s":""},{"t":"14–26","g":[{"k":"me","t":"ב-Higgsfield אני בוחרת Nano Banana Pro, 2K, 9:16. מדביקה את הפרומפט ולוחצת צור."}],"s":""},{"t":"26–35","g":[{"k":"me","t":"כשיש תמונה שאני אוהבת, אני מחזירה אותה ל-Claude ומבקשת פרומפט לווידאו, עם אותו Skill."}],"s":""},{"t":"35–46","g":[{"k":"me","t":"בוחרת Seedance 2.5, מדביקה, מצרפת את התמונה, ולוחצת צור."}],"s":""},{"t":"46–58","g":[{"k":"me","t":"מורידה את השוטים, מחברת ב-Edits, בוחרת סאונד, ומפרסמת."}],"s":""},{"t":"58–64","g":[{"k":"me","t":"רוצים את ה-Skill ואת כל הפרומפטים? תגיבו 'מדריך'."}],"s":""}],"en":[{"t":"0–3","g":[{"k":"dir","t":"On screen: \"How to create this\""}],"s":""},{"t":"3–7","g":[{"k":"me","t":"First I open Claude, with the skill I built for campaigns."}],"s":""},{"t":"7–14","g":[{"k":"me","t":"I ask it for an image prompt: a giant bag on a London street, a porter pushing it on a trolley."}],"s":""},{"t":"14–26","g":[{"k":"me","t":"In Higgsfield I pick Nano Banana Pro, 2K, 9 by 16. Paste the prompt, hit generate."}],"s":""},{"t":"26–35","g":[{"k":"me","t":"When I have an image I love, I bring it back to Claude for a video prompt, same skill."}],"s":""},{"t":"35–46","g":[{"k":"me","t":"Seedance 2.5, paste, attach the image, generate."}],"s":""},{"t":"46–58","g":[{"k":"me","t":"I download the shots, stitch them in Edits, pick a sound, and post."}],"s":""},{"t":"58–64","g":[{"k":"me","t":"Want the skill and every prompt? Comment GUIDE."}],"s":""}]}]}];
+const CAM = {on:false, stream:null, canvas:null, raf:0};
+const REC = {on:false, rec:null, chunks:[], blob:null, url:null, n:{}, ext:'webm'};
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('ffp:'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('ffp:'+k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem('ffp:'+k); }catch(e){} }
+};
+const S = {
+  speed: store.get('speed', 40), fs: store.get('fs', innerWidth<600 ? 34 : 54), lang:'he', ver:0,
+  mirror: store.get('mirror', false), mirrorv:false, dirs: store.get('dirs', true),
+  playing:false, y:0, reel:null, edit:false, t:0
+};
+const lvlClass = l => l==='קל' ? 'l1' : (l.startsWith('בינוני') ? 'l2' : 'l3');
+const endSec = lines => { const m = (lines.at(-1)?.t||'').match(/(\d+)\s*$/); return m ? +m[1] : 0; };
+const fmt = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+/* ---------- library ---------- */
+function renderList(){
+  const done = store.get('done', {});
+  $('#list').innerHTML = DATA.map((r,i)=>{
+    const secs = endSec(r.v[0].he);
+    return `<button class="row ${done[r.id]?'done':''}" data-i="${i}">
+      <span class="num">${String(i+1).padStart(2,'0')}</span>
+      <span class="rt"><b>${esc(r.id)} · ${esc(r.title)}</b><span>${[r.headline, r.v.length>1 ? 'יש גם: '+r.v[1].name : ''].filter(Boolean).map(esc).join(' · ')}</span></span>
+      <span class="chips"><span class="chip ${lvlClass(r.level)}">${esc(r.level)}</span><span class="chip">${secs} שנ'</span><span class="chip">${esc(r.code)}</span>${done[r.id]?'<span class="chip l1">צולם ✓</span>':''}</span>
+    </button>`;
+  }).join('');
+}
+$('#list').addEventListener('click', e=>{ const b = e.target.closest('.row'); if(b) openReel(+b.dataset.i); });
+
+/* ---------- prompter ---------- */
+const key = () => `edit:${S.reel.id}:${S.ver}:${S.lang}`;
+function lines(){ const v = S.reel.v[S.ver]; return (S.lang==='en' && v.en.length) ? v.en : v.he; }
+function lineHTML(l){
+  const g = l.g.map(s=>{
+    if(s.k==='me') return `<span class="me">${esc(s.t)}</span> `;
+    if(s.k==='clone') return `<span class="clone">${esc(s.t)}</span>`;
+    if(s.k==='tag') return `<span class="tag">${esc(s.t)}</span>`;
+    return `<span class="dir">${esc(s.t)}</span>`;
+  }).join('');
+  return `<span class="tc">${esc(l.t)}</span><div class="txt">${g}</div>${l.s?`<span class="osc">${S.lang==='en'?'on screen':'על המסך'}: ${esc(l.s)}</span>`:''}`;
+}
+function build(){
+  const sc = $('#scroll'), r = S.reel, v = r.v[S.ver];
+  sc.setAttribute('dir', S.lang==='en' ? 'ltr' : 'rtl');
+  const saved = store.get(key(), null);
+  const ls = lines();
+  sc.innerHTML = `<div class="cap">${esc(r.id)} · ${esc(r.title)}${S.ver?' · '+esc(v.name):''} · ${S.lang==='en'?'comment':'מילת קוד'}: ${esc(r.code)}</div>`
+    + ls.map((l,i)=>`<div class="ln" data-i="${i}">${saved && saved[i]!=null ? saved[i] : lineHTML(l)}</div>`).join('')
+    + `<div class="endmark">— ${S.lang==='en'?'end · cut':'סוף · קאט'} —</div>`;
+  sc.style.fontSize = S.fs+'px';
+  $('#hTitle').textContent = `${r.id} · ${r.title}`;
+  $('#hLen').textContent = fmt(endSec(ls));
+  $('#verG').hidden = r.v.length < 2;
+  $('#verG').innerHTML = r.v.map((x,i)=>`<button class="b ${i===S.ver?'on':''}" data-v="${i}">${i?esc(x.name):'ראשי'}</button>`).join('');
+  document.querySelectorAll('#langG .b').forEach(b=>b.classList.toggle('on', b.dataset.l===S.lang));
+  if(S.edit) setEdit(true);
+  reset();
+}
+function markY(){ return $('#stage').clientHeight * (CAM.on ? 0.20 : 0.30); }
+function reset(){ pause(); S.y = 0; S.t = 0; apply(); }
+function apply(){
+  const top = markY() - S.y;
+  $('#scroll').style.transform = `translateY(${top}px)`;
+  // highlight the line on the reading mark
+  let cur = null;
+  document.querySelectorAll('#scroll .ln').forEach(el=>{
+    const a = el.offsetTop + top, b = a + el.offsetHeight;
+    const on = a <= markY()+S.fs*0.6 && b > markY()-S.fs*0.2;
+    el.classList.toggle('on', on); if(on && cur===null) cur = el;
+  });
+  $('#hTime').textContent = fmt(S.t);
+}
+function maxY(){ const e = $('#scroll .endmark'); return e ? e.offsetTop : 0; }
+let last = 0, raf = 0;
+function tick(ts){
+  if(!S.playing) return;
+  const dt = last ? (ts-last)/1000 : 0; last = ts;
+  S.y = Math.min(S.y + S.speed * (S.fs/54) * dt, maxY());
+  S.t += dt;
+  apply();
+  if(S.y >= maxY()) { if(REC.on){ S.playing=false; setTimeout(stopRec, 1500); } else pause(); return; }
+  raf = requestAnimationFrame(tick);
+}
+let wake = null;
+async function lockWake(){ try{ wake = await navigator.wakeLock?.request('screen'); }catch(e){} }
+function play(){
+  if(S.playing) return;
+  const start = () => { S.playing = true; last = 0; document.body.classList.add('playing'); $('#play').textContent='❚❚ עצירה'; raf = requestAnimationFrame(tick); idleSoon(); };
+  lockWake();
+  if(S.y === 0){ countdown(start); } else start();
+}
+function pause(){
+  S.playing = false; cancelAnimationFrame(raf); clearInterval(cdT); $('#count').hidden = true;
+  document.body.classList.remove('playing','idle'); setPlayLabel();
+}
+let cdT = 0;
+function countdown(done){
+  let n = 3; const c = $('#count'); c.hidden = false; c.textContent = n;
+  clearInterval(cdT);
+  cdT = setInterval(()=>{ n--; if(n<=0){ clearInterval(cdT); c.hidden = true; done(); } else c.textContent = n; }, 800);
+}
+function toggle(){ if(CAM.on){ REC.on ? stopRec() : (!$('#count').hidden ? pause() : startRec()); return; } (S.playing || !$('#count').hidden) ? pause() : play(); }
+function jump(d){
+  const els = [...document.querySelectorAll('#scroll .ln')];
+  const ys = els.map(e=>e.offsetTop);
+  let i = ys.findIndex(y => y > S.y + 2);
+  i = i < 0 ? els.length : i;
+  const target = d > 0 ? ys[i] : ys[Math.max(0, i-2)];
+  if(target != null){ S.y = target; apply(); }
+}
+function setSpeed(v){ S.speed = Math.max(5, Math.min(200, v)); store.set('speed', S.speed); $('#spV').textContent = S.speed; }
+function setFs(v){ const ratio = S.y / (maxY()||1); S.fs = Math.max(24, Math.min(120, v)); store.set('fs', S.fs); $('#scroll').style.fontSize = S.fs+'px'; S.y = ratio*maxY(); apply(); }
+function setMirror(){ $('#flip').classList.toggle('mirror', S.mirror); $('#flip').classList.toggle('mirrorv', S.mirrorv); $('#mirB').classList.toggle('on', S.mirror); $('#mirV').classList.toggle('on', S.mirrorv); }
+function setDirs(){ $('#scroll').classList.toggle('nodir', !S.dirs); $('#dirB').classList.toggle('on', S.dirs); apply(); }
+function setEdit(on){
+  S.edit = on; $('#editB').classList.toggle('on', on); $('#editB').textContent = on ? 'שמירה' : 'עריכה';
+  document.querySelectorAll('#scroll .txt').forEach(el=>el.contentEditable = on ? 'true' : 'false');
+  if(!on){
+    const out = {}; document.querySelectorAll('#scroll .ln').forEach((el,i)=>{ out[i] = el.innerHTML; });
+    store.set(key(), out);
+  }
+}
+function openReel(i){
+  S.reel = DATA[i]; S.ver = 0; S.lang = 'he'; S.edit = false; window._idx = i;
+  $('#lib').hidden = true; $('#pr').hidden = false;
+  const done = store.get('done', {}); $('#doneB').classList.toggle('on', !!done[S.reel.id]);
+  build(); setMirror(); setDirs(); setSpeed(S.speed);
+  requestAnimationFrame(apply);
+}
+function closeReel(){
+  camOff();
+  if(S.edit) setEdit(false);
+  pause(); $('#pr').hidden = true; $('#lib').hidden = false; renderList();
+  try{ wake?.release(); }catch(e){} wake = null;
+  if(document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
+}
+let idleT = 0;
+function idleSoon(){ document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(()=>{ if(S.playing) document.body.classList.add('idle'); }, 2200); }
+
+$('#stage').addEventListener('click', e=>{ if(S.edit) return; if(document.body.classList.contains('idle')){ idleSoon(); } toggle(); });
+$('#stage').addEventListener('mousemove', idleSoon);
+$('#stage').addEventListener('wheel', e=>{ e.preventDefault(); S.y = Math.max(0, Math.min(maxY(), S.y + e.deltaY*0.6)); apply(); }, {passive:false});
+let ty = null;
+$('#stage').addEventListener('touchstart', e=>{ ty = e.touches[0].clientY; }, {passive:true});
+$('#stage').addEventListener('touchmove', e=>{ if(ty===null || S.edit) return; const y = e.touches[0].clientY; S.y = Math.max(0, Math.min(maxY(), S.y + (ty-y))); ty = y; apply(); }, {passive:true});
+$('#play').onclick = toggle;
+$('#back').onclick = closeReel;
+$('#restart').onclick = reset;
+$('#spD').onclick = ()=>setSpeed(S.speed-5);
+$('#spU').onclick = ()=>setSpeed(S.speed+5);
+$('#fsD').onclick = ()=>setFs(S.fs-6);
+$('#fsU').onclick = ()=>setFs(S.fs+6);
+$('#mirB').onclick = ()=>{ S.mirror = !S.mirror; store.set('mirror', S.mirror); setMirror(); };
+$('#mirV').onclick = ()=>{ S.mirrorv = !S.mirrorv; setMirror(); };
+$('#dirB').onclick = ()=>{ S.dirs = !S.dirs; store.set('dirs', S.dirs); setDirs(); };
+$('#editB').onclick = ()=>{ pause(); setEdit(!S.edit); };
+$('#doneB').onclick = ()=>{ const d = store.get('done', {}); d[S.reel.id] = !d[S.reel.id]; store.set('done', d); $('#doneB').classList.toggle('on', d[S.reel.id]); };
+$('#fullB').onclick = ()=>{ (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.())?.catch?.(()=>{}); };
+$('#langG').onclick = e=>{ const b = e.target.closest('[data-l]'); if(!b) return; if(S.edit) setEdit(false); S.lang = b.dataset.l; build(); setDirs(); };
+$('#verG').onclick = e=>{ const b = e.target.closest('[data-v]'); if(!b) return; if(S.edit) setEdit(false); S.ver = +b.dataset.v; build(); setDirs(); };
+document.addEventListener('keydown', e=>{
+  if($('#pr').hidden || S.edit || !$('#review').hidden) return;
+  const k = e.key;
+  if(k===' ' || k==='Enter'){ e.preventDefault(); toggle(); }
+  else if(k==='ArrowUp'){ e.preventDefault(); setSpeed(S.speed+5); }
+  else if(k==='ArrowDown'){ e.preventDefault(); setSpeed(S.speed-5); }
+  else if(k==='ArrowLeft' || k==='PageDown'){ e.preventDefault(); jump(1); }
+  else if(k==='ArrowRight' || k==='PageUp'){ e.preventDefault(); jump(-1); }
+  else if(k==='r' || k==='R'){ reset(); }
+  else if(k==='m' || k==='M'){ $('#mirB').click(); }
+  else if(k==='Escape'){ closeReel(); }
+  else if(k==='+' || k==='='){ setFs(S.fs+6); }
+  else if(k==='-'){ setFs(S.fs-6); }
+});
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && S.playing) lockWake(); });
+addEventListener('resize', ()=>{ if(!$('#pr').hidden) apply(); });
+
+/* ---------- camera + recording ---------- */
+function camMsg(html){ const m = $('#camMsg'); m.querySelector('div').innerHTML = html; m.hidden = !html; }
+async function camOn(){
+  camMsg('');
+  if(!navigator.mediaDevices?.getUserMedia){ return camFail(); }
+  try{
+    const st = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:'user', width:{ideal:1920}, height:{ideal:1080}, frameRate:{ideal:30}},
+      audio:{echoCancellation:false, noiseSuppression:true}
+    });
+    CAM.stream = st; CAM.on = true;
+    const v = $('#cam'); v.srcObject = st; v.hidden = false; await v.play().catch(()=>{});
+    document.body.classList.add('cam'); $('#camB').classList.add('on');
+    $('#stage').style.setProperty('--mark','20%');
+    if(S.fs > 40){ S._fsBefore = S.fs; setFs(innerWidth<600 ? 28 : 40); }
+    setTimeout(()=>{ $('#guide916').hidden = !(v.videoWidth > v.videoHeight); }, 600);
+    setPlayLabel(); apply();
+  }catch(e){ camFail(e); }
+}
+function camFail(e){
+  camMsg(`<div><b>המצלמה לא נפתחה כאן.</b><br>בתוך Claude הדף לא מקבל גישה למצלמה. פתחי את הקובץ <b>prompter-camera.html</b> שקיבלת בצ'אט בדפדפן Chrome במחשב, או העלי אותו לאתר שלך (למשל frameandflowclub.com/prompter.html) כדי לצלם מהטלפון.<br><br>${e && e.name==='NotAllowedError' ? 'אם הדפדפן שאל על מצלמה, צריך ללחוץ "אפשר".' : ''}<br><button class="b" onclick="camMsg('')" style="border:1px solid #2e2620;margin-top:8px">הבנתי</button></div>`);
+}
+function camOff(){
+  if(REC.on) stopRec(true);
+  CAM.stream?.getTracks().forEach(t=>t.stop()); CAM.stream = null; CAM.on = false;
+  cancelAnimationFrame(CAM.raf);
+  $('#cam').hidden = true; $('#guide916').hidden = true; document.body.classList.remove('cam'); $('#camB').classList.remove('on');
+  $('#stage').style.removeProperty('--mark');
+  if(S._fsBefore){ setFs(S._fsBefore); S._fsBefore = 0; }
+  setPlayLabel(); apply();
+}
+function setPlayLabel(){
+  const b = $('#play');
+  b.classList.toggle('rec', CAM.on && !REC.on); b.classList.toggle('play', !CAM.on);
+  b.textContent = CAM.on ? (REC.on ? '■ עצירה' : '● צלמי') : (S.playing ? '❚❚ עצירה' : (S.y>0 ? '▶ המשך' : '▶ התחלה'));
+}
+function recStream(){
+  const v = $('#cam'), st = CAM.stream;
+  if(v.videoHeight >= v.videoWidth) return st;            // already vertical (phone)
+  // landscape camera (laptop): crop the centre to 9:16 so the take is reel-ready
+  const H = Math.min(1920, v.videoHeight), W = Math.round(H*9/16);
+  const c = CAM.canvas || (CAM.canvas = document.createElement('canvas'));
+  c.width = W; c.height = H; const g = c.getContext('2d');
+  const sw = v.videoHeight*9/16;
+  const draw = () => { g.drawImage(v, (v.videoWidth - sw)/2, 0, sw, v.videoHeight, 0, 0, W, H); CAM.raf = requestAnimationFrame(draw); };
+  draw();
+  const out = c.captureStream(30);
+  st.getAudioTracks().forEach(t=>out.addTrack(t));
+  return out;
+}
+function pickType(){
+  const opts = ['video/mp4;codecs=avc1,mp4a','video/mp4','video/webm;codecs=vp9,opus','video/webm'];
+  for(const t of opts){ if(window.MediaRecorder?.isTypeSupported?.(t)) return t; }
+  return '';
+}
+function startRec(){
+  if(!CAM.on || REC.on) return;
+  S.y = 0; S.t = 0; apply();
+  lockWake();
+  countdown(()=>{
+    const type = pickType();
+    try{ REC.rec = new MediaRecorder(recStream(), type ? {mimeType:type, videoBitsPerSecond:8_000_000} : undefined); }
+    catch(e){ camMsg('<div><b>ההקלטה לא התחילה.</b><br>הדפדפן הזה לא תומך בהקלטת וידאו. נסי Chrome או Safari מעודכן.</div>'); return; }
+    REC.ext = (REC.rec.mimeType||type).includes('mp4') ? 'mp4' : 'webm';
+    REC.chunks = [];
+    REC.rec.ondataavailable = e => { if(e.data.size) REC.chunks.push(e.data); };
+    REC.rec.onstop = showTake;
+    REC.rec.start(1000);
+    REC.on = true; setPlayLabel();
+    S.playing = true; last = 0; document.body.classList.add('playing'); raf = requestAnimationFrame(tick); idleSoon();
+  });
+}
+function stopRec(silent){
+  if(!REC.on) return;
+  REC.on = false; S.playing = false; cancelAnimationFrame(raf); cancelAnimationFrame(CAM.raf);
+  document.body.classList.remove('playing','idle');
+  REC._silent = !!silent;
+  try{ REC.rec.stop(); }catch(e){}
+  setPlayLabel();
+}
+function showTake(){
+  if(REC._silent) return;
+  REC.blob = new Blob(REC.chunks, {type: REC.rec.mimeType || 'video/webm'});
+  if(REC.url) URL.revokeObjectURL(REC.url);
+  REC.url = URL.createObjectURL(REC.blob);
+  const id = S.reel.id; REC.n[id] = (REC.n[id]||0) + 1;
+  const t = $('#take'); t.src = REC.url; t.play().catch(()=>{});
+  $('#takeInfo').textContent = `${id} · טייק ${REC.n[id]} · ${fmt(S.t)} · ${(REC.blob.size/1e6).toFixed(1)}MB`;
+  $('#review').hidden = false;
+}
+function takeName(){ return `${S.reel.id.replace(/\s+/g,'-')}${S.lang==='en'?'-EN':''}-take${REC.n[S.reel.id]}.${REC.ext}`; }
+$('#saveTake').onclick = async ()=>{
+  const name = takeName();
+  try{
+    const file = new File([REC.blob], name, {type: REC.blob.type});
+    if(navigator.canShare?.({files:[file]})){ await navigator.share({files:[file]}); return; }   // phone: "Save Video" to Photos
+  }catch(e){ if(e.name==='AbortError') return; }
+  const a = document.createElement('a'); a.href = REC.url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  $('#takeInfo').textContent = `נשמר: ${name}`;
+};
+$('#retake').onclick = ()=>{ $('#review').hidden = true; $('#take').pause(); startRec(); };
+$('#closeTake').onclick = ()=>{ $('#review').hidden = true; $('#take').pause(); S.y = 0; S.t = 0; apply(); };
+$('#review').addEventListener('click',e=>e.stopPropagation());
+$('#camMsg').addEventListener('click',e=>e.stopPropagation());
+$('#camB').onclick = ()=>{ pause(); CAM.on ? camOff() : camOn(); };
+
+renderList();
+if(location.hash){ const n = parseInt(location.hash.slice(1)); if(n>=1 && n<=DATA.length) openReel(n-1); }
+</script>
+</body></html>
