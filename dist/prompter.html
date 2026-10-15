@@ -114,6 +114,8 @@ h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(34px,7vw,56px);line
 #camMsg{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;z-index:3;background:#000e}
 #camMsg div{max-width:46ch;line-height:1.7;color:var(--bone);font-size:16px}
 #camMsg b{color:var(--gold)}
+#toast{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--bone);color:var(--espresso);padding:10px 16px;border-radius:10px;font-size:14px;z-index:4;max-width:90%;text-align:center}
+#copyArea{position:absolute;inset:10% 6%;z-index:4;background:var(--ink);color:var(--bone);border:1px solid var(--line);border-radius:10px;padding:12px;font:16px/1.6 var(--f-read)}
 #takes{font-family:var(--f-mono);font-size:12px;color:var(--mute)}
 </style>
 
@@ -155,10 +157,13 @@ h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(34px,7vw,56px);line
       </div>
     </div>
     <div id="camMsg" hidden><div></div></div>
+    <div id="toast" hidden></div>
+    <textarea id="copyArea" hidden readonly></textarea>
   </div>
   <div id="bar">
     <button class="b" id="back" title="חזרה לרשימה">→ רשימה</button>
     <button class="b play" id="play">▶ התחלה</button>
+    <button class="b" id="copyB" title="מעתיק את הטקסט שלך כדי להדביק בפרומפטר של Edits">📋 העתקה ל-Edits</button>
     <button class="b" id="camB" title="צילום עם הפרומפטר">📷 מצלמה</button>
     <div class="grp"><span class="lbl">מהירות</span><button class="b" id="spD" aria-label="לאט יותר">−</button><span class="val" id="spV"></span><button class="b" id="spU" aria-label="מהר יותר">+</button></div>
     <div class="grp"><span class="lbl">גודל</span><button class="b" id="fsD" aria-label="טקסט קטן יותר">A−</button><button class="b" id="fsU" aria-label="טקסט גדול יותר">A+</button></div>
@@ -464,6 +469,21 @@ $('#closeTake').onclick = ()=>{ $('#review').hidden = true; $('#take').pause(); 
 $('#review').addEventListener('click',e=>e.stopPropagation());
 $('#camMsg').addEventListener('click',e=>e.stopPropagation());
 $('#camB').onclick = ()=>{ pause(); CAM.on ? camOff() : camOn(); };
+
+function plainScript(){
+  const en = S.lang==='en';
+  return lines().map(l => l.g.map(s => s.k==='me' ? s.t : s.k==='clone' ? (en?'[VOICE: ':'[הקול: ')+s.t+']' : '').filter(Boolean).join('\n')).filter(Boolean).join('\n\n');
+}
+let toastT = 0;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>t.hidden = true, 3500); }
+$('#toast').addEventListener('click', e=>e.stopPropagation());
+$('#copyArea').addEventListener('click', e=>e.stopPropagation());
+$('#copyB').onclick = async ()=>{
+  pause();
+  const txt = plainScript();
+  try{ await navigator.clipboard.writeText(txt); toast('הועתק. ב-Edits: מצלמה ← פרומפטר ← הדבקה'); }
+  catch(e){ const a = $('#copyArea'); a.value = txt; a.hidden = false; a.focus(); a.select(); toast('סמני הכול והעתיקי. לחיצה מחוץ לטקסט סוגרת'); setTimeout(()=>{ document.addEventListener('click', function h(ev){ if(ev.target!==a){ a.hidden = true; document.removeEventListener('click', h, true); } }, true); }, 50); }
+};
 
 renderList();
 if(location.hash){ const n = parseInt(location.hash.slice(1)); if(n>=1 && n<=DATA.length) openReel(n-1); }
